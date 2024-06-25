@@ -521,12 +521,12 @@ const Devices = () => {
                         </TableHead>
                         <TableBody>
                           <TableRow>
-                            <TableCell>{selectedDevice.device_id}</TableCell>
-                            <TableCell>{selectedDevice.serial_number}</TableCell>
-                            <TableCell>{selectedDevice.device_user_id}</TableCell>
-                            <TableCell>{selectedDevice.device_type}</TableCell>
-                            <TableCell>{selectedDevice.cumulative_flow}</TableCell>
-                            <TableCell>{selectedDevice.received_datetime}</TableCell>
+                                <TableCell>{selectedDevice.device_id}</TableCell>
+                                <TableCell>{selectedDevice.serial_number}</TableCell>
+                                <TableCell>{selectedDevice.device_user_id}</TableCell>
+                                <TableCell>{selectedDevice.device_type}</TableCell>
+                                <TableCell>{selectedDevice.cumulative_flow}</TableCell>
+                                <TableCell>{selectedDevice.received_datetime}</TableCell>
                           </TableRow>
                         </TableBody>
                       </Table>
@@ -552,26 +552,26 @@ const Devices = () => {
                       <button className='ml-10' onClick={handleReset}>АРИЛГАХ</button>
                     </Box>
                   </Box>
-                  <Box>
+                  <Box className='mt-2'>
                   <TableContainer>
-                      <Table sx={{minWidth:500}} aria-label='simple table'>
+                      <Table sx={{maxWidth:650}} size='small' aria-label='simple table'>
                         <TableHead>
                           <TableRow>
                             <TableCell>Он сар</TableCell>
                             <TableCell>Заалт</TableCell>
-                            <TableCell>Хаалт</TableCell>
+                            <TableCell>Төлөв</TableCell>
                             <TableCell>Мэдээлэл</TableCell>
                             <TableCell>Тайлбар</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          <TableRow>
-                            <TableCell>{selectedDevice.device_id}</TableCell>
-                            <TableCell>{selectedDevice.serial_number}</TableCell>
-                            <TableCell>{selectedDevice.device_user_id}</TableCell>
-                            <TableCell>{selectedDevice.device_type}</TableCell>
-                            <TableCell>{selectedDevice.cumulative_flow}</TableCell>
-                          </TableRow>
+                          {data.map((dev) => (
+                              <TableRow key={dev.device_id} sx={{'&:last-child td, &:last-child th': { border: 0 }}}>
+                                  <TableCell>{dev.received_datetime}</TableCell>
+                                  <TableCell>{dev.cumulative_flow}</TableCell>
+                                  <TableCell>{dev.device_type}</TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                       </Table>
                     </TableContainer>
