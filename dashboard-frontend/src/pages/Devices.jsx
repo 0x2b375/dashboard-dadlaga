@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Header } from '../components';
@@ -21,8 +22,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import { BsEyeFill } from "react-icons/bs";
 import Map from '../data/map';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { useStateContext } from '../contexts/ContextProvider';
+
 
 const Devices = () => {
+  const [filteredViewData, setFilteredViewData] = useState([]);
   const [action, setAction] = useState('');
   const [data, setData] = useState([]);
   const [viewData, setViewData] = useState([])
@@ -33,7 +37,6 @@ const Devices = () => {
   const [mapVisible, setMapVisible] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState('');
   const [position, setPosition] = useState([47.91885,106.91760]);
-
   const handleClickOpen = (device) => {
     setOpen(true);
     setSelectedDevice(device);
@@ -125,7 +128,22 @@ const Devices = () => {
     setAction('edit');
   }
 
+  const filterDataByDate = () => {
+    if (startDate && endDate) {
+      const filteredData = viewData.filter((dev) => {
+        const devDate = new Date(dev.received_datetime);
+        return devDate >= new Date(startDate) && devDate <= new Date(endDate);
+      });
+      setFilteredViewData(filteredData);
+    } else {
+      setFilteredViewData(viewData);
+    }
+  };
 
+  useEffect(() => {
+    filterDataByDate();
+  }, [startDate, endDate, viewData]);
+  
   const columns = [
     { field: 'device_id', headerName: 'Төхөөрөмжийн ID', flex:1, headerAlign: 'start', headerClassName: 'super-app-theme--header',},
     { field: 'serial_number', headerName: 'Дугаар', headerAlign: 'start', flex:1,},
@@ -525,7 +543,6 @@ const Devices = () => {
                           <TableRow>
                             <TableCell>Төхөөрөмжийн ID</TableCell>
                             <TableCell>Төхөөрөмжийн дугаар</TableCell>
-                            <TableCell>Хэрэглэгчийн дугаар</TableCell>
                             <TableCell>Төрөл</TableCell>
                             <TableCell>Заалт</TableCell>
                             <TableCell>Он сар</TableCell>
@@ -535,7 +552,6 @@ const Devices = () => {
                           <TableRow>
                                 <TableCell>{selectedDevice.device_id}</TableCell>
                                 <TableCell>{selectedDevice.serial_number}</TableCell>
-                                <TableCell>{selectedDevice.device_user_id}</TableCell>
                                 <TableCell>{selectedDevice.device_type}</TableCell>
                                 <TableCell>{selectedDevice.cumulative_flow}</TableCell>
                                 <TableCell>{selectedDevice.received_datetime}</TableCell>
@@ -565,7 +581,7 @@ const Devices = () => {
                     </Box>
                   </Box>
                   <Box className='mt-2'>
-                  <TableContainer>
+                  <TableContainer className='flex justify-center items-center'>
                       <Table sx={{maxWidth:650}} size='small' aria-label='simple table'>
                         <TableHead>
                           <TableRow>
@@ -576,7 +592,7 @@ const Devices = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {viewData.map((dev) => (
+                          {filteredViewData.map((dev) => (
                               <TableRow key={dev.device_id} sx={{'&:last-child td, &:last-child th': { border: 0 }}}>
                                   <TableCell>{dev.received_datetime}</TableCell>
                                   <TableCell>{dev.cumulative_flow}</TableCell>

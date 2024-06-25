@@ -163,6 +163,28 @@ app.post("/api/device/view", async (req, res) => {
   }
 });
 
+app.post("/api/device/status", async (req, res) => {
+  try {
+    const loginResponse = await axios.post(loginUrl, loginPayload, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const accessToken = loginResponse.data.tokens.access;
+    const statusResponse = await axios.post(devicesDetailsUrl, {
+      device_id:req.body.device_id
+    }, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+    res.json(statusResponse.data);
+  } catch (error) {
+    console.log(error)
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
