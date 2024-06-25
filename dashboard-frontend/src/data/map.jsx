@@ -36,7 +36,7 @@ export default function Map() {
   }, []);
 
   return (
-    <MapContainer center={[47.92262, 106.92618]} zoom={14} scrollWheelZoom={true} style={{ height: "100vh", width: "100%" }}>
+    <MapContainer center={[47.91885,106.91760]} zoom={15} scrollWheelZoom={true} style={{ height: "100vh", width: "100%" }}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

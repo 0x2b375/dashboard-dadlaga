@@ -21,12 +21,12 @@ const Devices = () => {
 
   const [mapVisible, setMapVisible] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState('');
-  const [position, setPosition] = useState([47.92262, 106.92618]);
+  const [position, setPosition] = useState([47.91885,106.91760]);
 
   const handleClickOpen = (device) => {
     setOpen(true);
     setSelectedDevice(device);
-    setPosition([47.92262, 106.92618])
+    setPosition([47.91885,106.91760])
     setAction('add')
   };
 
