@@ -26,6 +26,7 @@ const Devices = () => {
   const handleClickOpen = (device) => {
     setOpen(true);
     setSelectedDevice(device);
+    setPosition([47.92262, 106.92618])
     setAction('add')
   };
 
@@ -86,10 +87,11 @@ const Devices = () => {
   };
 
   const handleEdit = (device) => {
-    setSelectedDevice(device);
+    setSelectedDevice(device)
     const latitude = device.device_user_geolocation_latitude
     const longitude = device.device_user_geolocation_longitude
     setPosition([latitude, longitude]);
+    setUserId(device.device_user_id)
     setOpen(true);
     setAction('edit');
   }
@@ -323,7 +325,7 @@ const Devices = () => {
                       <MdDelete className='rounded-xl hover:bg-gray-300 text-xl' />
                     </Button>
                     <Button onClick={()=> {
-                      handleEdit()
+                      handleEdit(selectedDevice)
                     }}>
                       <MdEdit className='rounded-xl hover:bg-gray-300 text-xl' />
                     </Button>
@@ -332,7 +334,7 @@ const Devices = () => {
     
                 <Grid item xs={20}>
                   <Box mt={2} height="500px">
-                    <MapContainer center={position} zoom={13} style={{ height: "100%", width: "100%" }}>
+                    <MapContainer center={position} zoom={20} style={{ height: "100%", width: "100%" }}>
                       <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       />
@@ -393,14 +395,37 @@ const Devices = () => {
                         }}
                       />
                         <Button onClick={handleMapVisible} style={{marginLeft: '10px'}}>БАЙРШИЛ ӨӨРЧЛӨХ</Button>
-                      <Button>ХАДГАЛАХ</Button>
+                      <Button onClick={()=> {
+                        const [longtitude, latitude] = position
+                         const dataToSend = {
+                          device_id: selectedDevice.device_id,
+                          device_user_id: userId,
+                          device_user_geolocation_latitude: selectedDevice.device_user_geolocation_latitude,
+                          device_user_geolocation_longitude: selectedDevice.device_user_geolocation_longitude,
+                        };
+  
+                    
+                        axios.post('http://localhost:3001/api/user/edit', dataToSend, {
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                        })
+                          .then(response => {
+                            console.log('Backend Response:', response.data);
+                          })
+                          .catch(error => {
+                            console.error('Error', error);
+                          });
+                    
+                        handleClose();
+                      }}>ХАДГАЛАХ</Button>
                     </Box>
                   </Grid>
     
                   {mapVisible && (
                     <Grid item xs={20}>
                       <Box mt={2} height="500px">
-                        <MapContainer center={position} zoom={13} style={{ height: "100%", width: "100%" }}>
+                        <MapContainer center={position} zoom={20} style={{ height: "100%", width: "100%" }}>
                           <TileLayer
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                           />
