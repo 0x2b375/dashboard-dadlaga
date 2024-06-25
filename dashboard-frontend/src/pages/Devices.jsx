@@ -70,7 +70,7 @@ const Devices = () => {
   const handleView = (device) => {
     setSelectedDevice(device)
     setAction('view')
-    axios.post('http://localhost:3001/api/device/view', device.device_id,{
+    axios.post('http://localhost:3001/api/device/view', device,{
       headers: {
         "Content-Type": "application/json",
       },
@@ -127,23 +127,23 @@ const Devices = () => {
 
 
   const columns = [
-    { field: 'device_id', headerName: 'Төхөөрөмжийн ID', width: 130, headerAlign: 'start', headerClassName: 'super-app-theme--header',},
-    { field: 'serial_number', headerName: 'Дугаар', headerAlign: 'start',},
-    { field: 'device_type', headerName: 'Төрөл', headerAlign: 'start',
+    { field: 'device_id', headerName: 'Төхөөрөмжийн ID', flex:1, headerAlign: 'start', headerClassName: 'super-app-theme--header',},
+    { field: 'serial_number', headerName: 'Дугаар', headerAlign: 'start', flex:1,},
+    { field: 'device_type', headerName: 'Төрөл', headerAlign: 'start', flex:1,
       renderCell: (params) => (
         <span style={{ color: params.value === 'Халуун' ? 'red' : 'blue' }}>{params.value}</span>
       ),
     },
-    { field: 'status', headerName: 'Төлөв', headerAlign: 'start',
+    { field: 'status', headerName: 'Төлөв', headerAlign: 'start', flex:1,
       renderCell: (params) => (
         <span>{params.value === 'open' ? 'Нээлттэй' : 'Хаалттай'}</span>
       ),
     },
-    { field: 'cumulative_flow', headerName: 'Заалт', headerAlign: 'start', },
-    { field: 'device_user_id', headerName: 'Хэрэглэгчийн ID', headerAlign: 'start',},
-    { field: 'device_user_geolocation_latitude', headerName: 'Өргөрөг', headerAlign: 'start',},
-    { field: 'device_user_geolocation_longitude', headerName: 'Уртраг', headerAlign: 'start',},
-    { field: 'received_datetime', headerName: 'Сүүлд шинэчлэгдсэн хугацаа', headerAlign: 'start',},
+    { field: 'cumulative_flow', headerName: 'Заалт', headerAlign: 'start', flex:1, },
+    { field: 'device_user_id', headerName: 'Хэрэглэгчийн ID', headerAlign: 'start', flex:1,},
+    { field: 'device_user_geolocation_latitude', headerName: 'Өргөрөг', headerAlign: 'start', flex:1,},
+    { field: 'device_user_geolocation_longitude', headerName: 'Уртраг', headerAlign: 'start', flex:1,},
+    { field: 'received_datetime', headerName: 'Сүүлд шинэчлэгдсэн хугацаа', headerAlign: 'start', flex:1,},
     {
       field: 'actions',
       headerName: 'Үйлдэл',
@@ -181,8 +181,8 @@ const Devices = () => {
 
   return (
     <div className='flex flex-col mt-12'>
-      <div className='m-2 md:m-8 p-2 md:p-8 flex justify-center flex-col items-center'>
-        <div style={{ height: '500', maxWidth: '100%'}}>
+      <div className='m-2 md:m-8 p-2 md:p-8 flex justify-center flex-col items-center h-screen overflow-hidden flex-1 relative'>
+        <div style={{ width:'100%'}}>
           <DataGrid
             rows={data}
             rowHeight={45}
@@ -573,15 +573,15 @@ const Devices = () => {
                             <TableCell>Заалт</TableCell>
                             <TableCell>Төлөв</TableCell>
                             <TableCell>Мэдээлэл</TableCell>
-                            <TableCell>Тайлбар</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {data.map((dev) => (
+                          {viewData.map((dev) => (
                               <TableRow key={dev.device_id} sx={{'&:last-child td, &:last-child th': { border: 0 }}}>
                                   <TableCell>{dev.received_datetime}</TableCell>
                                   <TableCell>{dev.cumulative_flow}</TableCell>
-                                  <TableCell>{dev.device_type}</TableCell>
+                                  <TableCell>{dev.status}</TableCell>
+                                  <TableCell>{dev.battery_status}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

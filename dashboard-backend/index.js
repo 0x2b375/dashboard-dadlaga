@@ -149,15 +149,15 @@ app.post("/api/device/view", async (req, res) => {
       },
     });
     const accessToken = loginResponse.data.tokens.access;
-    await axios.post(devicesDetailsUrl, req.body, {
+    const detailResponse = await axios.post(devicesDetailsUrl, {
+      device_id:req.body.device_id
+    }, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
     });
-    res.json({
-      status: "success"
-    });
+    res.json(detailResponse.data);
   } catch (error) {
     console.log(error)
   }
