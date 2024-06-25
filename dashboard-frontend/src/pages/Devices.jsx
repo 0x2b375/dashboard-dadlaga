@@ -125,7 +125,7 @@ const Devices = () => {
           <button
             type='button'
             onClick={() => handleMap(params.row)}
-            className='m-3 text-slate-500'
+            className='m-3 text-blue-500'
           >
             <IoIosGlobe className='rounded-xl hover:bg-gray-300 text-xl' />
           </button>
@@ -133,14 +133,14 @@ const Devices = () => {
           <button
             type='button'
             onClick={() => handleClickOpen(params.row)}
-            className='m-3 text-slate-500'
+            className='m-3 text-blue-500'
           >
             <PiUserCirclePlusFill className='rounded-xl hover:bg-gray-300 text-xl' />
           </button>
         )}
           <button
             type='button'
-            className='text-slate-500'
+            className='text-blue-500'
             onClick={() => handleView(params.row.device_id)}
           >
             <BsEyeFill className='rounded-xl hover:bg-gray-300 text-xl'/>
