@@ -17,6 +17,7 @@ export default {
         'secondary-dark-bg': '#33373E',
         'light-gray': '#F7F7F7',
         'half-transparent': 'rgba(0, 0, 0, 0.5)',
+        'table-bg': 'rgb(242, 240, 240)'
       },
       borderWidth: {
         1: '1px',

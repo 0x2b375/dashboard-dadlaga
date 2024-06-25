@@ -110,7 +110,7 @@ const Devices = () => {
         <span>{params.value === 'open' ? 'Нээлттэй' : 'Хаалттай'}</span>
       ),
     },
-    { field: 'cumulative_flow', headerName: 'Заалт', headerAlign: 'start',},
+    { field: 'cumulative_flow', headerName: 'Заалт', headerAlign: 'start', },
     { field: 'device_user_id', headerName: 'Хэрэглэгчийн ID', headerAlign: 'start',},
     { field: 'device_user_geolocation_latitude', headerName: 'Өргөрөг', headerAlign: 'start',},
     { field: 'device_user_geolocation_longitude', headerName: 'Уртраг', headerAlign: 'start',},
@@ -152,7 +152,10 @@ const Devices = () => {
 
   return (
     <div className='flex flex-col mt-12'>
-      <div className='m-2 md:m-8 p-2 md:p-8 flex justify-center flex-col items-center'>
+      <div className='cards'>
+        
+      </div>
+      <div className='m-2 md:m-8 p-2 md:p-8 flex justify-center flex-col items-center bg-table-bg'>
         <div style={{ height: '500', maxWidth: '100%'}}>
           <DataGrid
             rows={data}
