@@ -25,6 +25,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 const Devices = () => {
   const [action, setAction] = useState('');
   const [data, setData] = useState([]);
+  const [viewData, setViewData] = useState([])
   const [open, setOpen] = React.useState(false);
   const [userId, setUserId] = useState('');
   const [startDate, setStartDate] = useState('')
@@ -69,6 +70,17 @@ const Devices = () => {
   const handleView = (device) => {
     setSelectedDevice(device)
     setAction('view')
+    axios.post('http://localhost:3001/api/device/view', device.device_id,{
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response=> {
+        setViewData(response.data.body)
+        console.log('Backend Response:', response.data);
+      }).catch(error => {
+        console.error('Error', error);
+      });
     setOpen(true)
   };
 

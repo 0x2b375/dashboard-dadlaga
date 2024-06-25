@@ -13,6 +13,8 @@ const userDataUrl = process.env.USERDATA_URL;
 const deleteUrl = process.env.DELETEURL;
 const putUrl = process.env.PUTURL;
 const statusUrl = process.env.STATUSURL;
+const devicesDetailsUrl = process.env.DEVICESDETAIL_URL;
+
 
 const loginPayload = {
   username: process.env.LOGIN_USERNAME,
@@ -147,15 +149,14 @@ app.post("/api/device/view", async (req, res) => {
       },
     });
     const accessToken = loginResponse.data.tokens.access;
-    await axios.put(`${putUrl}${req.body.device_id}/`, req.body, {
+    await axios.post(devicesDetailsUrl, req.body, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
     });
     res.json({
-      status: "success",
-      body: "Device user info successfully updated",
+      status: "success"
     });
   } catch (error) {
     console.log(error)
