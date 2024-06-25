@@ -27,8 +27,11 @@ const Devices = () => {
     setOpen(true);
     setSelectedDevice(device);
     setAction('add')
-    
   };
+
+  const handleMapVisible = () => {
+    setMapVisible(prevMapVisible => ! prevMapVisible)
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -253,7 +256,7 @@ const Devices = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <Box display="flex" justifyContent="space-between">
-                      <Button onClick={() => setMapVisible(true)}>ГАЗРЫН ЗУРАГ</Button>
+                      <Button onClick={handleMapVisible}>ГАЗРЫН ЗУРАГ</Button>
                       <Button onClick={()=> {
                         const dataToSend = {
                           device_id: selectedDevice.device_id,
@@ -320,7 +323,7 @@ const Devices = () => {
                       <MdDelete className='rounded-xl hover:bg-gray-300 text-xl' />
                     </Button>
                     <Button onClick={()=> {
-                      handleEdit(selectedDevice)
+                      handleEdit()
                     }}>
                       <MdEdit className='rounded-xl hover:bg-gray-300 text-xl' />
                     </Button>
@@ -344,7 +347,8 @@ const Devices = () => {
                 <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Box display="flex" justifyContent="space-between">
-                    <Button onClick={() => {
+                    <div>Газрын зураг</div>
+                    <Button style={{color:'red'}} onClick={() => {
                       const dataToSend = {
                         device_id: selectedDevice.device_id,
                       };
@@ -366,11 +370,6 @@ const Devices = () => {
                     }}>
                       <MdDelete className='rounded-xl hover:bg-gray-300 text-xl' />
                     </Button>
-                    <Button onClick={()=> {
-                      handleClose()
-                    }}>
-                      <MdEdit className='rounded-xl hover:bg-gray-300 text-xl' />
-                    </Button>
                   </Box>
                 </Grid>
                 <Grid item xs={12}>
@@ -379,33 +378,37 @@ const Devices = () => {
                         margin="dense"
                         label="Хэрэглэгчийн ID"
                         variant="outlined"
-                        style={{ flex: 1, marginRight: '10px' }}
-                        value={selectedDevice.user_id}
+                        style={{ flex: 1, marginRight: '10px', maxWidth: '200px' }}
+                        value={userId}
                         onChange={(e) => setUserId(e.target.value)}
                       />
                       <TextField
                         margin="dense"
                         label="Хаяг"
                         variant="outlined"
-                        style={{ flex: 1 }}
+                        style={{ flex: 1, maxWidth: '300px' }}
                         value={`${selectedDevice.device_user_geolocation_latitude || ''} ${selectedDevice.device_user_geolocation_longitude || ''}`}
                         InputProps={{
                           readOnly: true,
                         }}
                       />
+                        <Button onClick={handleMapVisible} style={{marginLeft: '10px'}}>БАЙРШИЛ ӨӨРЧЛӨХ</Button>
+                      <Button>ХАДГАЛАХ</Button>
                     </Box>
                   </Grid>
     
-                <Grid item xs={20}>
-                  <Box mt={2} height="500px">
-                    <MapContainer center={position} zoom={13} style={{ height: "100%", width: "100%" }}>
-                      <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      />
-                      <LocationMarker />
-                    </MapContainer>
-                  </Box>
-                </Grid>
+                  {mapVisible && (
+                    <Grid item xs={20}>
+                      <Box mt={2} height="500px">
+                        <MapContainer center={position} zoom={13} style={{ height: "100%", width: "100%" }}>
+                          <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                          />
+                          <LocationMarker />
+                        </MapContainer>
+                      </Box>
+                    </Grid>
+                  )}
                 
               </Grid>
               )}
