@@ -153,7 +153,7 @@ const Devices = () => {
   return (
     <div className='flex flex-col mt-12'>
       <div className='m-2 md:m-8 p-2 md:p-8 flex justify-center flex-col items-center'>
-        <div style={{ height: '500',}}>
+        <div style={{ height: '500', maxWidth: '100%'}}>
           <DataGrid
             rows={data}
             rowHeight={45}
