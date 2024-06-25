@@ -13,7 +13,7 @@ import {useStateContext} from '../contexts/ContextProvider'
 
 
 const NavButton = ({title, customFunc, icon, color, dotColor}) => (
-  <button content={title} type='button' onClick={customFunc} style={{color}} className='relative flex justify-center items-center text-xl rounded-full p-3 hover:bg-gray-100'>
+  <button content={title} type='button' onClick={customFunc} style={{color}} className='relative flex justify-center items-center text-xl rounded-full p-3 hover:bg-slate-200 hover:text-slate-900'>
     <span style={{background: dotColor}} className='absolute inline-flex w-4 h-4 top-2 right-2'>
     </span>
     {icon}
@@ -54,7 +54,7 @@ const Navbar = () => {
           customFunc={()=>handleClick('notification')} 
           icon={<RiNotification3Line/>}
           />
-        <div className='flex items-center gap-2 cursor-pointer p-1 hover:bg-gray-100 rounded-lg' onClick={()=>handleClick('userProfile')}>
+        <div className='flex items-center gap-2 cursor-pointer p-1 hover:bg-slate-200 text-slate-9600 rounded-lg' onClick={()=>handleClick('userProfile')}>
           <img src='https://github.com/adrianhajdin/project_syncfusion_dashboard/blob/main/src/data/avatar.jpg?raw=true' alt="" className='rounded-full w-8 h-8'/>
           <MdKeyboardArrowDown className='text-gray-400 text-14'/>
         </div>

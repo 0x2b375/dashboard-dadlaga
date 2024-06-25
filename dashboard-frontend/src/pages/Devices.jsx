@@ -125,7 +125,7 @@ const Devices = () => {
           <button
             type='button'
             onClick={() => handleMap(params.row)}
-            className='m-3'
+            className='m-3 text-slate-500'
           >
             <IoIosGlobe className='rounded-xl hover:bg-gray-300 text-xl' />
           </button>
@@ -133,13 +133,14 @@ const Devices = () => {
           <button
             type='button'
             onClick={() => handleClickOpen(params.row)}
-            className='m-3'
+            className='m-3 text-slate-500'
           >
             <PiUserCirclePlusFill className='rounded-xl hover:bg-gray-300 text-xl' />
           </button>
         )}
           <button
             type='button'
+            className='text-slate-500'
             onClick={() => handleView(params.row.device_id)}
           >
             <BsEyeFill className='rounded-xl hover:bg-gray-300 text-xl'/>
@@ -266,7 +267,6 @@ const Devices = () => {
                           device_user_geolocation_latitude: selectedDevice.device_user_geolocation_latitude,
                           device_user_geolocation_longitude: selectedDevice.device_user_geolocation_longitude,
                         };
-                        console.log(dataToSend)
                     
                         axios.post('http://localhost:3001/api/user', dataToSend, {
                           headers: {
@@ -275,6 +275,7 @@ const Devices = () => {
                         })
                           .then(response => {
                             console.log('Backend Response:', response.data);
+                            setData(prevData => [...prevData, dataToSend]);
                           })
                           .catch(error => {
                             console.error('Error', error);
@@ -315,6 +316,7 @@ const Devices = () => {
                       })
                         .then(response => {
                           console.log('Backend Response:', response.data);
+                          setData(prevData => prevData.filter(device => device.device_id !== selectedDevice.device_id));
                         })
                         .catch(error => {
                           console.error('Error', error);
@@ -363,6 +365,8 @@ const Devices = () => {
                       })
                         .then(response => {
                           console.log('Backend Response:', response.data);
+                          setData(prevData => prevData.filter(item => item.device_id !== selectedDevice.device_id));
+                          
                         })
                         .catch(error => {
                           console.error('Error', error);
@@ -396,7 +400,6 @@ const Devices = () => {
                       />
                         <Button onClick={handleMapVisible} style={{marginLeft: '10px'}}>БАЙРШИЛ ӨӨРЧЛӨХ</Button>
                       <Button onClick={()=> {
-                        const [longtitude, latitude] = position
                          const dataToSend = {
                           device_id: selectedDevice.device_id,
                           device_user_id: userId,
@@ -412,6 +415,7 @@ const Devices = () => {
                         })
                           .then(response => {
                             console.log('Backend Response:', response.data);
+                            setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
                           })
                           .catch(error => {
                             console.error('Error', error);
