@@ -12,6 +12,7 @@ const devicesMononetUrl = process.env.DEVICESMONONET_URL;
 const userDataUrl = process.env.USERDATA_URL;
 const deleteUrl = process.env.DELETEURL;
 const putUrl = process.env.PUTURL;
+const statusUrl = process.env.STATUSURL;
 
 const loginPayload = {
   username: process.env.LOGIN_USERNAME,
@@ -98,7 +99,6 @@ app.post("/api/user/delete", async (req, res) => {
       },
     });
     const accessToken = loginResponse.data.tokens.access;
-    const refreshToken = loginResponse.data.tokens.refresh
     await axios.delete(`${deleteUrl}${req.body.device_id}/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -118,6 +118,28 @@ app.post("/api/user/delete", async (req, res) => {
 });
 
 app.post("/api/user/edit", async (req, res) => {
+  try {
+    const loginResponse = await axios.post(loginUrl, loginPayload, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const accessToken = loginResponse.data.tokens.access;
+    await axios.put(statusUrl, req.body, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+    res.json({
+      status: "success"
+    });
+  } catch (error) {
+    console.log(error)
+  }
+});
+
+app.post("/api/device/view", async (req, res) => {
   try {
     const loginResponse = await axios.post(loginUrl, loginPayload, {
       headers: {
