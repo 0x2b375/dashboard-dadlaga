@@ -147,7 +147,6 @@ app.post("/api/device/view", async (req, res) => {
       },
     });
     const accessToken = loginResponse.data.tokens.access;
-    const refreshToken = loginResponse.data.tokens.refresh
     await axios.put(`${putUrl}${req.body.device_id}/`, req.body, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
