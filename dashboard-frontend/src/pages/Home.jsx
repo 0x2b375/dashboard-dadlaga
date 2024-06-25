@@ -4,6 +4,7 @@ import React from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import Button from '../components/Button';
 import { earningData } from '../data/dummy';
+import Map from '../data/map';
 
 
 const years = [
@@ -62,50 +63,53 @@ const GermanyGDPperCapita = [
 const Home = () => {
   return (
     <div className="mt-12">
-      <div className="flex flex-wrap lg:flex-nowrap justify-center">
-      <div className="mt-12 chart-container flex">
-            <LineChart
-            xAxis={[
-              {
-                id: 'Years',
-                data: years,
-                scaleType: 'time',
-                valueFormatter: (date) => date.getFullYear().toString(),
-              },
-            ]}
-            series={[
-              {
-                id: 'France',
-                label: 'Хүйтэн',
-                data: FranceGDPperCapita,
-                stack: 'total',
-                area: true,
-                showMark: false,
-              },
-              {
-                id: 'Germany',
-                label: 'Халуун',
-                data: GermanyGDPperCapita,
-                stack: 'total',
-                area: true,
-                showMark: false,
-              },
-              {
-                id: 'United Kingdom',
-                label: 'Нийт',
-                data: UKGDPperCapita,
-                stack: 'total',
-                area: true,
-                showMark: false,
-              },
-            ]}
-            width={1400}
-            height={400}
-            margin={{ left: 70 }}
-          />
-      </div>
+      <div className="flex flex-wrap justify-center flex-col gap-5 m-8">
+        <div className="mt-12 flex bg-table-bg rounded-2xl">
+              <LineChart
+              xAxis={[
+                {
+                  id: 'Years',
+                  data: years,
+                  scaleType: 'time',
+                  valueFormatter: (date) => date.getFullYear().toString(),
+                },
+              ]}
+              series={[
+                {
+                  id: 'France',
+                  label: 'Хүйтэн',
+                  data: FranceGDPperCapita,
+                  stack: 'total',
+                  area: true,
+                  showMark: false,
+                },
+                {
+                  id: 'Germany',
+                  label: 'Халуун',
+                  data: GermanyGDPperCapita,
+                  stack: 'total',
+                  area: true,
+                  showMark: false,
+                },
+                {
+                  id: 'United Kingdom',
+                  label: 'Нийт',
+                  data: UKGDPperCapita,
+                  stack: 'total',
+                  area: true,
+                  showMark: false,
+                },
+              ]}
+              width={1500}
+              height={500}
+              margin={{ left: 70 }}
+            />
+        </div>
+        <div className='rounded-2xl'>
+          <Map className=''/>
+        </div>
 
-      
+
       {/* <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg h-44 rounded-xl w-full lg:w-80 p-8 pt-9 m-3 bg-no-repeat bg-cover bg-center">
         <div className="flex justify-between items-center">
           <div>
@@ -122,8 +126,7 @@ const Home = () => {
             size='md'
           />
         </div>
-      </div> */}
-      
+      </div> */}   
       {/* <div className='flex m-3 flex-wrap justify-center gap-3 items-center'>
         {earningData.map((item) => (
           <div key={item.title} className='bg-white dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56 p-4 pt-9 rounded-2xl'>
@@ -146,7 +149,6 @@ const Home = () => {
         ))}
       </div> */}
       </div>
-      
     </div>
   );
 };
