@@ -7,6 +7,8 @@ import { Button, Grid, TextField, Dialog, DialogActions, DialogContent, DialogTi
 import { PiUserCirclePlusFill } from "react-icons/pi";
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
+import { MdOutlineInvertColorsOff } from "react-icons/md";
+import { MdWaterDrop } from "react-icons/md";
 import { IoIosGlobe } from "react-icons/io";
 import DialogContentText from '@mui/material/DialogContentText';
 import { BsEyeFill } from "react-icons/bs";
@@ -52,7 +54,8 @@ const Devices = () => {
   }, []);
 
   const handleView = (id) => {
-    console.log("View", id);
+    setAction('view')
+    setOpen(true)
   };
 
   const handleMap = (device) => {
@@ -461,6 +464,50 @@ const Devices = () => {
                     </Grid>
                   )}
                 
+              </Grid>
+              )}
+              {action === 'view' && (
+                <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <div>Төхөөрөмжийн мэдээлэл</div>
+                    <Box display="flex" justifyContent="end">
+                      <button className='text-gray-600 mr-4' onClick={() => {
+                        const dataToSend = {
+                          device_id: selectedDevice.device_id,
+                        };
+
+                    
+                        axios.post('http://localhost:3001/api/user/delete', dataToSend, {
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                        })
+                          .then(response => {
+                            console.log('Backend Response:', response.data);
+                            setData(prevData => 
+                              prevData.map(device => 
+                                device.device_id === selectedDevice.device_id 
+                                  ? { ...device, device_user_id: null, device_user_geolocation_latitude: null, device_user_geolocation_longitude: null }
+                                  : device
+                              )
+                            );
+                          })
+                          .catch(error => {
+                            console.error('Error', error);
+                          });
+                    
+                        handleClose();
+                      }}>
+                        <MdWaterDrop className='rounded-xl hover:bg-gray-300 text-xl'/>
+                      </button>
+                      <button className='text-gray-600'>
+                        <MdOutlineInvertColorsOff className='rounded-xl hover:bg-gray-300 text-xl'/>
+                      </button>
+                    </Box>
+                    
+                  </Box>
+                </Grid>
               </Grid>
               )}
             </div>
