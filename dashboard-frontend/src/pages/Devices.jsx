@@ -9,6 +9,13 @@ import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { MdOutlineInvertColorsOff } from "react-icons/md";
 import { MdWaterDrop } from "react-icons/md";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 import { IoIosGlobe } from "react-icons/io";
 import DialogContentText from '@mui/material/DialogContentText';
 import { BsEyeFill } from "react-icons/bs";
@@ -20,7 +27,8 @@ const Devices = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [userId, setUserId] = useState('');
-
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
   const [mapVisible, setMapVisible] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState('');
   const [position, setPosition] = useState([47.91885,106.91760]);
@@ -31,6 +39,11 @@ const Devices = () => {
     setPosition([47.91885,106.91760])
     setAction('add')
   };
+
+  const handleReset = () => {
+    setStartDate('')
+    setEndDate('')
+  }
 
   const handleMapVisible = () => {
     setMapVisible(prevMapVisible => ! prevMapVisible)
@@ -53,7 +66,8 @@ const Devices = () => {
       });
   }, []);
 
-  const handleView = (id) => {
+  const handleView = (device) => {
+    setSelectedDevice(device)
     setAction('view')
     setOpen(true)
   };
@@ -144,7 +158,7 @@ const Devices = () => {
           <button
             type='button'
             className='text-blue-500'
-            onClick={() => handleView(params.row.device_id)}
+            onClick={() => handleView(params.row)}
           >
             <BsEyeFill className='rounded-xl hover:bg-gray-300 text-xl'/>
           </button>
@@ -472,40 +486,95 @@ const Devices = () => {
                   <Box display="flex" justifyContent="space-between" alignItems="center">
                     <div>Төхөөрөмжийн мэдээлэл</div>
                     <Box display="flex" justifyContent="end">
-                      <button className='text-gray-600 mr-4' onClick={() => {
-                        const dataToSend = {
-                          device_id: selectedDevice.device_id,
-                        };
-
-                    
-                        axios.post('http://localhost:3001/api/user/delete', dataToSend, {
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                        })
-                          .then(response => {
-                            console.log('Backend Response:', response.data);
-                            setData(prevData => 
-                              prevData.map(device => 
-                                device.device_id === selectedDevice.device_id 
-                                  ? { ...device, device_user_id: null, device_user_geolocation_latitude: null, device_user_geolocation_longitude: null }
-                                  : device
-                              )
-                            );
-                          })
-                          .catch(error => {
-                            console.error('Error', error);
-                          });
-                    
-                        handleClose();
-                      }}>
+                      <button 
+                        className='text-gray-600 mr-4' 
+                        onClick={() => {
+                          
+                          console.log('YOU CLICKED ON IT!')
+                          handleClose();
+                        }}
+                        disabled={!selectedDevice.device_user_id} 
+                      >
                         <MdWaterDrop className='rounded-xl hover:bg-gray-300 text-xl'/>
                       </button>
-                      <button className='text-gray-600'>
+                      <button 
+                        className='text-gray-600'
+                        disabled={!selectedDevice.device_user_id}
+                      >
                         <MdOutlineInvertColorsOff className='rounded-xl hover:bg-gray-300 text-xl'/>
                       </button>
+
                     </Box>
-                    
+                  </Box>
+                  <Box>
+                    <TableContainer>
+                      <Table sx={{minWidth:500}} aria-label='simple table'>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Төхөөрөмжийн ID</TableCell>
+                            <TableCell>Төхөөрөмжийн дугаар</TableCell>
+                            <TableCell>Хэрэглэгчийн дугаар</TableCell>
+                            <TableCell>Төрөл</TableCell>
+                            <TableCell>Заалт</TableCell>
+                            <TableCell>Он сар</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell>{selectedDevice.device_id}</TableCell>
+                            <TableCell>{selectedDevice.serial_number}</TableCell>
+                            <TableCell>{selectedDevice.device_user_id}</TableCell>
+                            <TableCell>{selectedDevice.device_type}</TableCell>
+                            <TableCell>{selectedDevice.cumulative_flow}</TableCell>
+                            <TableCell>{selectedDevice.received_datetime}</TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Box>
+                  <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
+                    <Box display="flex" alignItems="center">
+                      <TextField
+                        label="Start Date"
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        InputLabelProps={{ shrink: true }}
+                        sx={{ mr: 2 }}
+                      />
+                      <TextField
+                        label="End Date"
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        InputLabelProps={{ shrink: true }}
+                      />
+                      <button className='ml-10' onClick={handleReset}>АРИЛГАХ</button>
+                    </Box>
+                  </Box>
+                  <Box>
+                  <TableContainer>
+                      <Table sx={{minWidth:500}} aria-label='simple table'>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Он сар</TableCell>
+                            <TableCell>Заалт</TableCell>
+                            <TableCell>Хаалт</TableCell>
+                            <TableCell>Мэдээлэл</TableCell>
+                            <TableCell>Тайлбар</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell>{selectedDevice.device_id}</TableCell>
+                            <TableCell>{selectedDevice.serial_number}</TableCell>
+                            <TableCell>{selectedDevice.device_user_id}</TableCell>
+                            <TableCell>{selectedDevice.device_type}</TableCell>
+                            <TableCell>{selectedDevice.cumulative_flow}</TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
                   </Box>
                 </Grid>
               </Grid>
