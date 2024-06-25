@@ -175,7 +175,7 @@ const Devices = () => {
           />
         </div>
         <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-          <DialogTitle>{action === 'add' ? 'Төхөөрөмжийн мэдээлэл' : action === 'map' ? 'Газрын Зураг' : ''}</DialogTitle>
+          <DialogTitle>{action === 'add' ? 'Төхөөрөмжийн мэдээлэл' : ''}</DialogTitle>
           <DialogContent>
             <div className='mt-2'>
               {action === 'add' && (
@@ -275,7 +275,13 @@ const Devices = () => {
                         })
                           .then(response => {
                             console.log('Backend Response:', response.data);
-                            setData(prevData => [...prevData, dataToSend]);
+                            setData(prevData => 
+                              prevData.map(device => 
+                                device.device_id === selectedDevice.device_id 
+                                  ? { ...device, ...dataToSend } 
+                                  : device
+                              )
+                            );
                           })
                           .catch(error => {
                             console.error('Error', error);
@@ -302,35 +308,46 @@ const Devices = () => {
               {action === 'map' && (
                 <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <Box display="flex" justifyContent="space-between">
-                    <Button onClick={() => {
-                      const dataToSend = {
-                        device_id: selectedDevice.device_id,
-                      };
+                  <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <div>
+                      Газрын зураг
+                    </div>
 
-                  
-                      axios.post('http://localhost:3001/api/user/delete', dataToSend, {
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                      })
-                        .then(response => {
-                          console.log('Backend Response:', response.data);
-                          setData(prevData => prevData.filter(device => device.device_id !== selectedDevice.device_id));
+                    <Box display="flex" justifyContent="end">
+                      <Button style={{color: 'red'}} onClick={() => {
+                        const dataToSend = {
+                          device_id: selectedDevice.device_id,
+                        };
+
+                        axios.post('http://localhost:3001/api/user/delete', dataToSend, {
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
                         })
-                        .catch(error => {
-                          console.error('Error', error);
-                        });
-                  
-                      handleClose();
-                    }}>
-                      <MdDelete className='rounded-xl hover:bg-gray-300 text-xl' />
-                    </Button>
-                    <Button onClick={()=> {
-                      handleEdit(selectedDevice)
-                    }}>
-                      <MdEdit className='rounded-xl hover:bg-gray-300 text-xl' />
-                    </Button>
+                          .then(response => {
+                            console.log('Backend Response:', response.data);
+                            setData(prevData => 
+                              prevData.map(device => 
+                                device.device_id === selectedDevice.device_id 
+                                  ? { ...device, device_user_id: null, device_user_geolocation_latitude: null, device_user_geolocation_longitude: null }
+                                  : device
+                              )
+                            );
+                          })
+                          .catch(error => {
+                            console.error('Error', error);
+                          });
+
+                        handleClose();
+                      }}>
+                        <MdDelete className='rounded-xl hover:bg-gray-300 text-xl' />
+                      </Button>
+                      <Button onClick={() => {
+                        handleEdit(selectedDevice)
+                      }}>
+                        <MdEdit className='rounded-xl hover:bg-gray-300 text-xl' />
+                      </Button>
+                    </Box>
                   </Box>
                 </Grid>
     
@@ -365,8 +382,13 @@ const Devices = () => {
                       })
                         .then(response => {
                           console.log('Backend Response:', response.data);
-                          setData(prevData => prevData.filter(item => item.device_id !== selectedDevice.device_id));
-                          
+                          setData(prevData => 
+                            prevData.map(device => 
+                              device.device_id === selectedDevice.device_id 
+                                ? { ...device, device_user_id: null, device_user_geolocation_latitude: null, device_user_geolocation_longitude: null }
+                                : device
+                            )
+                          );
                         })
                         .catch(error => {
                           console.error('Error', error);

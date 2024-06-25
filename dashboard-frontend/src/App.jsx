@@ -12,13 +12,13 @@ const App = () => {
   const {activeMenu} = useStateContext();
   return (
     <BrowserRouter>
-      <div className='flex relative dark:bg-main-dark-bg transition-all duration-300'>
+      <div className='flex relative dark:bg-main-dark-bg'>
         {activeMenu ? (
-          <div className='w-72 fixed sidebar dark:bg-secondary-dark-bg bg-slate-600 transition-all duration-300'>
+          <div className='w-72 fixed sidebar dark:bg-secondary-dark-bg bg-slate-600'>
             <Sidebar/>
           </div>
         ) : (
-          <div className='w-0 dark:bg-secondary-dark-bg transition-all duration-300'>
+          <div className='w-0 dark:bg-secondary-dark-bg'>
             <Sidebar />
           </div>
         )}
