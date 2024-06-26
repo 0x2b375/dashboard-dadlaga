@@ -100,7 +100,7 @@ const Home = () => {
                   showMark: false,
                 },
               ]}
-              width={1500}
+              width={1000}
               height={500}
               margin={{ left: 70 }}
             />
