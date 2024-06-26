@@ -1,6 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 import { Header } from '../components';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
@@ -26,8 +29,9 @@ import Map from '../data/map';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import { useStateContext } from '../contexts/ContextProvider';
 import CloseIcon from '@mui/icons-material/Close'
-
-
+import { ConfirmDialog } from 'primereact/confirmdialog'; 
+import { Toast } from 'primereact/toast';
+import { confirmDialog } from 'primereact/confirmdialog'
 
 const Devices = () => {
   const [filteredViewData, setFilteredViewData] = useState([]);
@@ -43,7 +47,7 @@ const Devices = () => {
   const [mapVisible, setMapVisible] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState('');
   const [position, setPosition] = useState([47.91885,106.91760]);
-
+  const toast = useRef(null);
   const handleClickOpen = (device) => {
     setOpen(true);
     setSelectedDevice(device);
@@ -51,23 +55,25 @@ const Devices = () => {
     setAction('add')
   };
 
-  const showAlert = (message) => {
-    setAlertMsg(message);
-    setAlertOpen(true);
+  const accept = (msg) => {
+    toast.current.show({ severity: 'success', summary: 'Баталгаажлаа', detail: msg, life: 3000 });
+  }
 
-    setTimeout(() => {
-      setAlertOpen(false);
-    }, 3000); 
+  const reject = () => {
+      toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000, });
+  }
+
+  const confirm1 = () => {
+    handleClose()
+    confirmDialog({
+        message: 'Are you sure you want to proceed?',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        defaultFocus: 'accept',
+        accept,
+        reject
+    });
   };
-  const showErrorAlert = (message) => {
-    setAlertMsg(message);
-    setAlertOpen(true);
-
-    setTimeout(() => {
-      setAlertOpen(false);
-    }, 5000); 
-  };
-
 
   const handleReset = () => {
     setStartDate('')
@@ -226,6 +232,8 @@ const Devices = () => {
       
       <div className='m-4 p-2 md:p-8 flex justify-center flex-col items-center'>
         <div className=''>
+            <Toast ref={toast} />
+            <ConfirmDialog />
             {alertMsg && (
               <Collapse in={alertOpen} className='m-4'>
               <Alert
@@ -371,7 +379,7 @@ const Devices = () => {
                           },
                         })
                           .then(response => {
-                            showAlert('Хэрэглэгчийг амжилттай нэмлээ'); 
+                            accept('Хэрэглэгчийг амжилттай нэмлээ'); 
                             setData(prevData => 
                               prevData.map(device => 
                                 device.device_id === selectedDevice.device_id 
@@ -424,7 +432,7 @@ const Devices = () => {
                           },
                         })
                           .then(response => {
-                            showAlert('Хэрэглэгчийн мэдээллийг ажмилттай устгалаа.'); 
+                            accept('Хэрэглэгчийн мэдээллийг амжилттай устгалаа.'); 
                             setData(prevData => 
                               prevData.map(device => 
                                 device.device_id === selectedDevice.device_id 
@@ -480,7 +488,7 @@ const Devices = () => {
                         },
                       })
                         .then(response => {
-                          showAlert('Хэрэглэгчийн мэдээллийг амжилттай устгалаа.'); 
+                          accept('Хэрэглэгчийн мэдээллийг амжилттай устгалаа.'); 
                           setData(prevData => 
                             prevData.map(device => 
                               device.device_id === selectedDevice.device_id 
@@ -535,7 +543,7 @@ const Devices = () => {
                           },
                         })
                           .then(response => {
-                            showAlert('Хэрэглэгчийн мэдээллийг амжилттай өөрчиллөө.'); 
+                            accept('Хэрэглэгчийн мэдээллийг амжилттай өөрчиллөө.'); 
                             setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
                           })
                           .catch(error => {
@@ -568,7 +576,10 @@ const Devices = () => {
                   <Box display="flex" justifyContent="space-between" alignItems="center">
                     <div>Төхөөрөмжийн мэдээлэл</div>
                     <Box display="flex" justifyContent="end">
-                      <button 
+                      <button className='text-gray-600 mr-4' onClick={confirm1}>
+                        <MdWaterDrop className='rounded-xl hover:bg-gray-300 text-xl'/>
+                      </button>
+                      {/* <button 
                         className='text-gray-600 mr-4' 
                         onClick={() => {
                           const dataToSend = {
@@ -600,7 +611,7 @@ const Devices = () => {
                         disabled={!selectedDevice.device_user_id} 
                       >
                         <MdWaterDrop className='rounded-xl hover:bg-gray-300 text-xl'/>
-                      </button>
+                      </button> */}
                       <button 
                         className='text-gray-600'
                         disabled={!selectedDevice.device_user_id}
