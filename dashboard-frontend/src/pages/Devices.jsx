@@ -5,9 +5,11 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import { FaCirclePlus } from "react-icons/fa6";
 import { Header } from '../components';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
+import { TbMapPlus } from "react-icons/tb";
 import { Button, Grid, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Drawer, Collapse, IconButton  } from '@mui/material';
 import { PiUserCirclePlusFill } from "react-icons/pi";
 import { MdDelete } from "react-icons/md";
@@ -261,7 +263,7 @@ const Devices = () => {
             onClick={() => handleMap(params.row)}
             className='m-3 text-blue-500'
           >
-            <IoIosGlobe className='rounded-xl hover:bg-gray-300 text-xl' />
+            <IoIosGlobe className='rounded-xl hover:text-blue-800 text-xl' />
           </button>
         ) : (
           <button
@@ -269,7 +271,7 @@ const Devices = () => {
             onClick={() => handleClickOpen(params.row)}
             className='m-3 text-blue-500'
           >
-            <PiUserCirclePlusFill className='rounded-xl hover:bg-gray-300 text-xl' />
+            <PiUserCirclePlusFill className='rounded-xl hover:text-blue-800 text-xl' />
           </button>
         )}
           <button
@@ -277,7 +279,7 @@ const Devices = () => {
             className='text-blue-500'
             onClick={() => handleView(params.row)}
           >
-            <BsEyeFill className='rounded-xl hover:bg-gray-300 text-xl'/>
+            <BsEyeFill className='rounded-xl hover:text-blue-800 text-xl'/>
           </button>
         </div>
       ),
@@ -366,7 +368,9 @@ const Devices = () => {
                         }}
                       />
                        <Box display="flex" gap="1rem">
-                        <Button onClick={handleMapVisible}>ГАЗРЫН ЗУРАГ</Button>
+                        <Button onClick={handleMapVisible} >
+                          <TbMapPlus className='rounded-xl hover:text-blue-800 text-2xl'/>
+                        </Button>
                         <Button onClick={()=> {
                           const dataToSend = {
                             device_id: selectedDevice.device_id,
@@ -398,7 +402,9 @@ const Devices = () => {
                             });
                       
                           handleClose();
-                        }}>НЭМЭХ</Button>
+                        }}>
+                          <FaCirclePlus className='rounded-xl hover:text-blue-800 text-2xl'/>
+                        </Button>
                       </Box>
                       </Box>
                     </Grid>
@@ -583,20 +589,20 @@ const Devices = () => {
                   <Box display="flex" justifyContent="space-between" alignItems="center">
                     <div>Төхөөрөмжийн мэдээлэл</div>
                     <Box display="flex" justifyContent="end">
-                      <button
-                        className='text-gray-600 mr-4'
+                      <Button
+                        className='mr-4'
                         onClick={() => handle3times('open')}
                         disabled={!selectedDevice.device_user_id}
                       >
-                        <MdWaterDrop className='rounded-xl hover:bg-gray-300 text-xl' />
-                      </button>
-                      <button
-                        className='text-gray-600'
+                        <MdWaterDrop className='rounded-xl text-blue-500 hover:text-blue-800 text-2xl' />
+                      </Button>
+                      <Button
+                        className=''
                         disabled={!selectedDevice.device_user_id}
                         onClick={() => handle3times('close')}
                       >
-                        <MdOutlineInvertColorsOff className='rounded-xl hover:bg-gray-300 text-xl' />
-                      </button>
+                        <MdOutlineInvertColorsOff className='rounded-xl text-blue-500 hover:text-blue-800 text-2xl' />
+                      </Button>
                     </Box>
                   </Box>
                   <Box>
@@ -673,7 +679,7 @@ const Devices = () => {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Хаах</Button>
+            <Button onClick={handleClose} style={{color:'black'}}>Хаах</Button>
           </DialogActions>
         </Dialog>
       </div>
