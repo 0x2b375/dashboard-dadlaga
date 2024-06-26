@@ -19,6 +19,7 @@ export default {
         'half-transparent': 'rgba(0, 0, 0, 0.5)',
         'table-bg': '#21212d',
         'secondary-bg': '#15141a',
+        
       },
       borderWidth: {
         1: '1px',
@@ -44,6 +45,9 @@ export default {
       backgroundImage: {
         'hero-pattern':
           "url('https://i.ibb.co/MkvLDfb/Rectangle-4389.png')",
+      },
+      color: {
+        'gray-main': 'rgba(255, 255, 255, 0.767)',
       },
     },
   },

@@ -36,6 +36,7 @@ import { ConfirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
 import { confirmDialog } from 'primereact/confirmdialog'
 import "./device.css"
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 const Devices = () => {
   const [filteredViewData, setFilteredViewData] = useState([]);
   const [action, setAction] = useState('');
@@ -258,30 +259,42 @@ const Devices = () => {
           <button
             type='button'
             onClick={() => handleMap(params.row)}
-            className='m-3 text-blue-500'
+            className='m-3 text-gray-main'
           >
-            <IoIosGlobe className='rounded-xl hover:text-blue-800 text-xl' />
+            <IoIosGlobe className='rounded-xl hover:text-white text-xl' />
           </button>
         ) : (
           <button
             type='button'
             onClick={() => handleClickOpen(params.row)}
-            className='m-3 text-blue-500'
+            className='m-3 text-gray-main'
           >
-            <PiUserCirclePlusFill className='rounded-xl hover:text-blue-800 text-xl' />
+            <PiUserCirclePlusFill className='rounded-xl hover:text-white text-xl' />
           </button>
         )}
           <button
             type='button'
-            className='text-blue-500'
+            className='text-gray-main'
             onClick={() => handleView(params.row)}
           >
-            <BsEyeFill className='rounded-xl hover:text-blue-800 text-xl'/>
+            <BsEyeFill className='rounded-xl hover:text-white text-xl'/>
           </button>
         </div>
       ),
     },
   ];
+
+  const theme = createTheme({
+    components: {
+      MuiCheckbox: {
+        styleOverrides: {
+          root: {
+            color: 'rgba(255, 255, 255, 0.767)',
+          },
+        },
+      },
+    },
+  });
 
   return (
     <div className='h-screen overflow-auto mt-32 md:mt-8 '>
@@ -289,45 +302,47 @@ const Devices = () => {
         <div className=''>
             <Toast ref={toast} className='mt-24 md:mt-12'/>
             <ConfirmDialog />    
-          </div>
-        <Box sx={{ overflow: "auto" }}>
-          <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
-            <DataGrid
-              rows={data}
-              rowHeight={45}
-              autoHeight
-              columns={columns}
-              checkboxSelection
-              disableRowSelectionOnClick
-              getRowId={(row) => row.device_id}
-              initialState={{
-                pagination: {
-                  paginationModel: { pageSize: 10, page: 0 }, 
-                },
-              }}
-              pageSizeOptions={[5, 10, 20, 50]} 
-              slots={{toolbar: GridToolbar}}
-              sx={{
-                '& .MuiDataGrid-cell': {
-                  color: 'rgba(255, 255, 255, 0.767)',
-                  borderTopColor:'rgba(255, 255, 255, 0.10)',
-                },
-                '& .MuiDataGrid-columnHeaders': {
-                  color:'rgba(255, 255, 255, 0.767)',
-                  
-                },
-                '& .MuiDataGrid-columnHeader': {
-                  backgroundColor: '#21212d',
-                  
-                },
-                '& .MuiDataGrid-footerContainer': {
-                  borderTop: '1px solid rgba(255, 255, 255, 0.10)'
-                },
-                border: 'none',
-              }}
-            />
+        </div>
+        <ThemeProvider theme={theme}>
+          <Box sx={{ overflow: "auto" }}>
+            <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
+              <DataGrid
+                rows={data}
+                rowHeight={45}
+                autoHeight
+                columns={columns}
+                checkboxSelection
+                disableRowSelectionOnClick
+                getRowId={(row) => row.device_id}
+                initialState={{
+                  pagination: {
+                    paginationModel: { pageSize: 10, page: 0 }, 
+                  },
+                }}
+                pageSizeOptions={[5, 10, 20, 50]} 
+                slots={{toolbar: GridToolbar}}
+                sx={{
+                  '& .MuiDataGrid-cell': {
+                    color: 'rgba(255, 255, 255, 0.767)',
+                    borderTopColor:'rgba(255, 255, 255, 0.10)',
+                  },
+                  '& .MuiDataGrid-columnHeaders': {
+                    color:'rgba(255, 255, 255, 0.767)',
+                    
+                  },
+                  '& .MuiDataGrid-columnHeader': {
+                    backgroundColor: '#21212d',
+                    
+                  },
+                  '& .MuiDataGrid-footerContainer': {
+                    borderTop: '1px solid rgba(255, 255, 255, 0.10)'
+                  },
+                  border: 'none',
+                }}
+              />
+            </Box>
           </Box>
-        </Box>
+        </ThemeProvider>
         <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
           <DialogTitle>{action === 'add' ? 'Төхөөрөмжийн мэдээлэл' : ''}</DialogTitle>
           <DialogContent>
