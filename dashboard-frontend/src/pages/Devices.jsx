@@ -62,20 +62,22 @@ const Devices = () => {
       toast.current.show({ severity: 'warn', summary: 'Амжилтгүй', detail: msg, life: 3000, });
   }
 
-  const confirm1 = (msg, alertMsg) => {
+  const confirm1 = (msg, acceptMsg, rejectMsg) => {
     handleClose()
-    confirmDialog({
+    setTimeout(() => {
+      confirmDialog({
         message: msg,
         header: 'Батгалгаажуулалт',
         icon: 'pi pi-exclamation-triangle',
         defaultFocus: 'accept',
-        accept: () => accept(alertMsg),
-        reject,
+        accept: () => accept(acceptMsg),
+        reject: () => reject(rejectMsg),
         acceptClassName: 'custom-accept-button',
         rejectClassName: 'custom-reject-button',
         acceptLabel: 'Тийм', 
         rejectLabel: 'Үгүй'
-    });
+      });
+    }, 1000);
   };
 
   const handleReset = () => {
@@ -233,9 +235,9 @@ const Devices = () => {
   return (
     <div className='h-screen overflow-auto'>
       
-      <div className='m-4 p-2 md:p-8 flex justify-center flex-col items-center'>
+      <div className='m-2 p-2 sm:m-12 sm:p-12 md:m-8 md:p-8 flex justify-center flex-col items-center'>
         <div className=''>
-            <Toast ref={toast} />
+            <Toast ref={toast} className='sm:mb-8'/>
             <ConfirmDialog />    
           </div>
         <Box sx={{ overflow: "auto" }}>
@@ -587,7 +589,7 @@ const Devices = () => {
                               reject('Хүсэлт амжилтгүй боллоо.')
                               console.error('Error', error);
                             });
-                          handleClose();
+                         
 
                           
                         }}
@@ -612,7 +614,7 @@ const Devices = () => {
                             .then(response => {
                               console.log(response)
                               if (response.status === 200) {
-                                confirm1('Тоолуурын хаалт хаах хүсэлт илгээхдээ итгэлтэй байна уу?','Тоолуурын хаалт хаах хүсэлт амжилттай илгээгдлээ.') 
+                                confirm1('Тоолуурын хаалт хаах хүсэлт илгээхдээ итгэлтэй байна уу?','Тоолуурын хаалт хаах хүсэлт амжилттай илгээгдлээ.', 'Тоолуурын хаалт хаах хүсэлт амжилтгүй боллоо.') 
                                 setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
                               }
                              
@@ -621,7 +623,7 @@ const Devices = () => {
                               reject('Хүсэлт амжилтгүй боллоо.')
                               console.error('Error', error);
                             });
-                          handleClose();
+                          
 
                           
                         }}
