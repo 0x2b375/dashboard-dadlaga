@@ -327,7 +327,7 @@ const Devices = () => {
                     borderTopColor:'rgba(255, 255, 255, 0.10)',
                   },
                   '& .MuiDataGrid-columnHeaders': {
-                    color:'rgba(255, 255, 255, 0.767)',
+                    color:'rgba(255, 255, 255, 0.867)',
                     
                   },
                   '& .MuiDataGrid-columnHeader': {
