@@ -127,7 +127,7 @@ app.post("/api/user/edit", async (req, res) => {
       },
     });
     const accessToken = loginResponse.data.tokens.access;
-    await axios.put(statusUrl, req.body, {
+    const dataResult = await axios.put(`${putUrl}${req.body.device_id}/`, req.body, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
