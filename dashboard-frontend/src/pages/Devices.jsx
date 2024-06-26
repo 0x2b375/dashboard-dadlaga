@@ -47,6 +47,57 @@ const Devices = () => {
   const [selectedDevice, setSelectedDevice] = useState('');
   const [position, setPosition] = useState([47.91885,106.91760]);
   const toast = useRef(null);
+  
+  // useEffect(() => {
+  //   const today = new Date().toISOString().split('T')[0];
+  //   const storedDate = localStorage.getItem('requestDate');
+
+  //   if (storedDate !== today) {
+  //     localStorage.setItem('requestDate', today);
+  //     localStorage.setItem('requestCount', '0');
+  //   }
+  // }, []);
+
+  const handle3times = (statusValue) => {
+    // const requestCount = parseInt(localStorage.getItem('requestCount'), 10);
+    // localStorage.clear()
+    // if (requestCount >= 3) {
+    //   alert('You have reached the maximum number of requests for today.');
+    //   return;
+    // }
+
+    const dataToSend = {
+      device_id: selectedDevice.device_id,
+      status_value: statusValue,
+    };
+
+    axios.post('http://localhost:3001/api/device/status', dataToSend, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response => {
+        if (response.status === 200) {
+          // const newRequestCount = requestCount + 1;
+          // localStorage.setItem('requestCount', newRequestCount.toString());
+          
+          if (statusValue === 'open') {
+            confirm1('Тоолуурын хаалт нээх хүсэлт илгээхдээ итгэлтэй байна уу?', 'Тоолуурын хаалт нээх хүсэлт амжилттай илгээгдлээ.');
+          } else {
+            confirm1('Тоолуурын хаалт хаах хүсэлт илгээхдээ итгэлтэй байна уу?', 'Тоолуурын хаалт хаах хүсэлт амжилттай илгээгдлээ.');
+          }
+          
+          setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
+        }
+      })
+      .catch(error => {
+        reject('Хүсэлт амжилтгүй боллоо.');
+        console.error('Error', error);
+      });
+  };
+
+
+
   const handleClickOpen = (device) => {
     setOpen(true);
     setSelectedDevice(device);
@@ -63,21 +114,21 @@ const Devices = () => {
   }
 
   const confirm1 = (msg, acceptMsg, rejectMsg) => {
+    
+    
+    confirmDialog({
+      message: msg,
+      header: 'Батгалгаажуулалт',
+      icon: 'pi pi-exclamation-triangle',
+      defaultFocus: 'accept',
+      accept: () => accept(acceptMsg),
+      reject: () => reject(rejectMsg),
+      acceptClassName: 'custom-accept-button',
+      rejectClassName: 'custom-reject-button',
+      acceptLabel: 'Тийм', 
+      rejectLabel: 'Үгүй'
+    });
     handleClose()
-    setTimeout(() => {
-      confirmDialog({
-        message: msg,
-        header: 'Батгалгаажуулалт',
-        icon: 'pi pi-exclamation-triangle',
-        defaultFocus: 'accept',
-        accept: () => accept(acceptMsg),
-        reject: () => reject(rejectMsg),
-        acceptClassName: 'custom-accept-button',
-        rejectClassName: 'custom-reject-button',
-        acceptLabel: 'Тийм', 
-        rejectLabel: 'Үгүй'
-      });
-    }, 1000);
   };
 
   const handleReset = () => {
@@ -233,11 +284,11 @@ const Devices = () => {
   ];
 
   return (
-    <div className='h-screen overflow-auto'>
+    <div className='h-screen overflow-auto mt-32 md:mt-8'>
       
       <div className='m-2 p-2 sm:m-12 sm:p-12 md:m-8 md:p-8 flex justify-center flex-col items-center'>
         <div className=''>
-            <Toast ref={toast} className='sm:mb-8'/>
+            <Toast ref={toast} className='mt-24 md:mt-12'/>
             <ConfirmDialog />    
           </div>
         <Box sx={{ overflow: "auto" }}>
@@ -328,6 +379,7 @@ const Devices = () => {
                     <Box display="flex" justifyContent="space-between">
                       <TextField
                         margin="dense"
+                        required
                         label="Хэрэглэгчийн ID"
                         variant="outlined"
                         style={{ flex: 1, marginRight: '10px' }}
@@ -336,6 +388,7 @@ const Devices = () => {
                       />
                       <TextField
                         margin="dense"
+                        required
                         label="Хаяг"
                         variant="outlined"
                         style={{ flex: 1 }}
@@ -564,73 +617,20 @@ const Devices = () => {
                   <Box display="flex" justifyContent="space-between" alignItems="center">
                     <div>Төхөөрөмжийн мэдээлэл</div>
                     <Box display="flex" justifyContent="end">
-                      <button 
-                        className='text-gray-600 mr-4' 
-                        onClick={() => {
-                          const dataToSend = {
-                            device_id: selectedDevice.device_id,
-                            status_value: 'open',
-                          }
-
-                          axios.post('http://localhost:3001/api/device/status', dataToSend, {
-                            headers: {
-                              "Content-Type": "application/json",
-                            },
-                          })
-                            .then(response => {
-                              console.log(response)
-                              if (response.status === 200) {
-                                confirm1('Тоолуурын хаалт нээх хүсэлт илгээхдээ итгэлтэй байна уу?','Тоолуурын хаалт нээх хүсэлт амжилттай илгээгдлээ.') 
-                                setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
-                              }
-                             
-                            })
-                            .catch(error => {
-                              reject('Хүсэлт амжилтгүй боллоо.')
-                              console.error('Error', error);
-                            });
-                         
-
-                          
-                        }}
-                        disabled={!selectedDevice.device_user_id} 
+                      <button
+                        className='text-gray-600 mr-4'
+                        onClick={() => handle3times('open')}
+                        disabled={!selectedDevice.device_user_id}
                       >
-                        <MdWaterDrop className='rounded-xl hover:bg-gray-300 text-xl'/>
+                        <MdWaterDrop className='rounded-xl hover:bg-gray-300 text-xl' />
                       </button>
-                      <button 
+                      <button
                         className='text-gray-600'
                         disabled={!selectedDevice.device_user_id}
-                        onClick={() => {
-                          const dataToSend = {
-                            device_id: selectedDevice.device_id,
-                            status_value: 'close',
-                          }
-
-                          axios.post('http://localhost:3001/api/device/status', dataToSend, {
-                            headers: {
-                              "Content-Type": "application/json",
-                            },
-                          })
-                            .then(response => {
-                              console.log(response)
-                              if (response.status === 200) {
-                                confirm1('Тоолуурын хаалт хаах хүсэлт илгээхдээ итгэлтэй байна уу?','Тоолуурын хаалт хаах хүсэлт амжилттай илгээгдлээ.', 'Тоолуурын хаалт хаах хүсэлт амжилтгүй боллоо.') 
-                                setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
-                              }
-                             
-                            })
-                            .catch(error => {
-                              reject('Хүсэлт амжилтгүй боллоо.')
-                              console.error('Error', error);
-                            });
-                          
-
-                          
-                        }}
+                        onClick={() => handle3times('close')}
                       >
-                        <MdOutlineInvertColorsOff className='rounded-xl hover:bg-gray-300 text-xl'/>
+                        <MdOutlineInvertColorsOff className='rounded-xl hover:bg-gray-300 text-xl' />
                       </button>
-
                     </Box>
                   </Box>
                   <Box>
@@ -657,7 +657,7 @@ const Devices = () => {
                       </Table>
                     </TableContainer>
                   </Box>
-                  <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
+                  <Box display="flex" justifyContent="space-between" alignItems="center" className="date-box" mt={2}>
                     <Box display="flex" alignItems="center">
                       <TextField
                         label="Start Date"
@@ -694,7 +694,7 @@ const Devices = () => {
                                   <TableCell>{dev.received_datetime}</TableCell>
                                   <TableCell>{dev.cumulative_flow}</TableCell>
                                   <TableCell>{dev.status}</TableCell>
-                                  <TableCell>{dev.battery_status}</TableCell>
+                                  <TableCell>battery: {dev.battery_status}V</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
