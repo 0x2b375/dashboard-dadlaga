@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { Header } from '../components';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
@@ -32,11 +33,9 @@ import CloseIcon from '@mui/icons-material/Close'
 import { ConfirmDialog } from 'primereact/confirmdialog'; 
 import { Toast } from 'primereact/toast';
 import { confirmDialog } from 'primereact/confirmdialog'
-
+import "./device.css"
 const Devices = () => {
   const [filteredViewData, setFilteredViewData] = useState([]);
-  const [alertOpen, setAlertOpen] = useState([false]);
-  const [alertMsg, setAlertMsg] = useState('')
   const [action, setAction] = useState('');
   const [data, setData] = useState([]);
   const [viewData, setViewData] = useState([])
@@ -63,15 +62,19 @@ const Devices = () => {
       toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000, });
   }
 
-  const confirm1 = () => {
+  const confirm1 = (msg, alertMsg) => {
     handleClose()
     confirmDialog({
-        message: 'Are you sure you want to proceed?',
-        header: 'Confirmation',
+        message: msg,
+        header: 'Батгалгаажуулалт',
         icon: 'pi pi-exclamation-triangle',
         defaultFocus: 'accept',
-        accept,
-        reject
+        accept: () => accept(alertMsg),
+        reject,
+        acceptClassName: 'custom-accept-button',
+        rejectClassName: 'custom-reject-button',
+        acceptLabel: 'Тийм', 
+        rejectLabel: 'Үгүй'
     });
   };
 
@@ -233,28 +236,7 @@ const Devices = () => {
       <div className='m-4 p-2 md:p-8 flex justify-center flex-col items-center'>
         <div className=''>
             <Toast ref={toast} />
-            <ConfirmDialog />
-            {alertMsg && (
-              <Collapse in={alertOpen} className='m-4'>
-              <Alert
-                
-                severity="success"
-                action={
-                  <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => setAlertOpen(false)}
-                  >
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                }
-              >
-                {alertMsg}
-              </Alert>
-            </Collapse>
-            )}
-            
+            <ConfirmDialog />    
           </div>
         <Box sx={{ overflow: "auto" }}>
           <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
@@ -576,10 +558,10 @@ const Devices = () => {
                   <Box display="flex" justifyContent="space-between" alignItems="center">
                     <div>Төхөөрөмжийн мэдээлэл</div>
                     <Box display="flex" justifyContent="end">
-                      <button className='text-gray-600 mr-4' onClick={confirm1}>
+                      {/* <button className='text-gray-600 mr-4' onClick={confirm1('Тоолуурын хаалт нээх хүсэлт илгээхдээ итгэлтэй байна уу?','Тоолуурын хаалт нээх хүсэлт амжилттай илгээгдлээ.')}>
                         <MdWaterDrop className='rounded-xl hover:bg-gray-300 text-xl'/>
-                      </button>
-                      {/* <button 
+                      </button> */}
+                      <button 
                         className='text-gray-600 mr-4' 
                         onClick={() => {
                           const dataToSend = {
@@ -595,7 +577,7 @@ const Devices = () => {
                             .then(response => {
                               console.log(response)
                               if (response.status === 200) {
-                                showAlert('Тоолуурын хаалт нээх хүсэлт илгээгдсэн.'); 
+                                confirm1('Тоолуурын хаалт нээх хүсэлт илгээхдээ итгэлтэй байна уу?','Тоолуурын хаалт нээх хүсэлт амжилттай илгээгдлээ.') 
                                 setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
                               }
                              
@@ -611,7 +593,7 @@ const Devices = () => {
                         disabled={!selectedDevice.device_user_id} 
                       >
                         <MdWaterDrop className='rounded-xl hover:bg-gray-300 text-xl'/>
-                      </button> */}
+                      </button>
                       <button 
                         className='text-gray-600'
                         disabled={!selectedDevice.device_user_id}
