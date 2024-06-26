@@ -63,8 +63,8 @@ const GermanyGDPperCapita = [
 const Home = () => {
   return (
     <div className="mt-12">
-      <div className="flex flex-wrap justify-center flex-col gap-5 m-8 overflow-auto shadow-xl">
-        <div className="mt-12 flex bg-table-bg rounded-2xl w-full">
+      <div className="flex flex-wrap justify-center flex-col m-8 overflow-auto ">
+        <div className="mt-12 flex bg-table-bg rounded-2xl w-full shadow-sm">
               <LineChart
               xAxis={[
                 {
@@ -105,10 +105,13 @@ const Home = () => {
               margin={{ left: 70 }}
             />
         </div>
-        <div className='rounded-2xl'>
+      </div>
+      <div className='overflow-auto m-8 rounded-2xl bg-table-bg shadow-xl'>
+        <div className='w-full '>
           <Map className=''/>
         </div>
       </div>
+     
     </div>
   );
 };
