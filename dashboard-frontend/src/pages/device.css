@@ -21,3 +21,8 @@
 .date-box {
   justify-content: center !important;
 }
+
+.css-n3fyjk-MuiDataGrid-root .MuiDataGrid-container--top [role=row], .css-n3fyjk-MuiDataGrid-root .MuiDataGrid-container--bottom [role=row] {
+  background-color: rgb(102, 117, 138) !important;
+  color: white;
+}

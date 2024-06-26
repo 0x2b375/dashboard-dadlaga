@@ -59,15 +59,22 @@ const Devices = () => {
   //     localStorage.setItem('requestCount', '0');
   //   }
   // }, []);
+  // const requestCount = parseInt(localStorage.getItem('requestCount'), 10);
+  // localStorage.clear()
+  // if (requestCount >= 3) {
+  //   alert('You have reached the maximum number of requests for today.');
+  //   return;
+  // }
+
+  const handleClickOpen = (device) => {
+    setOpen(true);
+    setSelectedDevice(device);
+    setUserId('')
+    setPosition([47.91885,106.91760])
+    setAction('add')
+  };
 
   const handle3times = (statusValue) => {
-    // const requestCount = parseInt(localStorage.getItem('requestCount'), 10);
-    // localStorage.clear()
-    // if (requestCount >= 3) {
-    //   alert('You have reached the maximum number of requests for today.');
-    //   return;
-    // }
-
     const dataToSend = {
       device_id: selectedDevice.device_id,
       status_value: statusValue,
@@ -99,17 +106,7 @@ const Devices = () => {
         console.error('Error', error);
       });
   };
-
-
-
-  const handleClickOpen = (device) => {
-    setOpen(true);
-    setSelectedDevice(device);
-    setUserId('')
-    setPosition([47.91885,106.91760])
-    setAction('add')
-  };
-
+  
   const accept = (msg) => {
     toast.current.show({ severity: 'success', summary: 'Баталгаажлаа', detail: msg, life: 3000 });
   }
@@ -119,8 +116,6 @@ const Devices = () => {
   }
 
   const confirm1 = (msg, acceptMsg, rejectMsg) => {
-    
-    
     confirmDialog({
       message: msg,
       header: 'Батгалгаажуулалт',
@@ -290,7 +285,6 @@ const Devices = () => {
 
   return (
     <div className='h-screen overflow-auto mt-32 md:mt-8 '>
-      
       <div className='m-2 p-2 sm:m-12 sm:p-12 md:m-8 md:p-8 flex justify-center flex-col items-center bg-table-bg rounded-2xl shadow-xl'>
         <div className=''>
             <Toast ref={toast} className='mt-24 md:mt-12'/>
@@ -313,9 +307,6 @@ const Devices = () => {
               }}
               pageSizeOptions={[5, 10, 20, 50]} 
               slots={{toolbar: GridToolbar}}
-              sx={{
-                borderColor: ''
-              }}
             />
           </Box>
         </Box>
@@ -371,7 +362,7 @@ const Devices = () => {
                       />
                        <Box display="flex" gap="1rem">
                         <Button onClick={handleMapVisible} >
-                          <TbMapPlus className='rounded-xl hover:text-blue-800 text-2xl'/>
+                          <p className='p-3 bg-main-bg rounded-lg hover:bg-slate-200 ml-2'>ГАЗРЫН ЗУРАГ</p>
                         </Button>
                         <Button onClick={()=> {
                           const dataToSend = {
@@ -405,7 +396,7 @@ const Devices = () => {
                       
                           handleClose();
                         }}>
-                          <FaCirclePlus className='rounded-xl hover:text-blue-800 text-2xl'/>
+                          <p className='p-3 bg-main-bg rounded-lg hover:bg-slate-200'>НЭМЭХ</p>
                         </Button>
                       </Box>
                       </Box>
