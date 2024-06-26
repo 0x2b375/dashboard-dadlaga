@@ -287,9 +287,9 @@ const Devices = () => {
   ];
 
   return (
-    <div className='h-screen overflow-auto mt-32 md:mt-8'>
+    <div className='h-screen overflow-auto mt-32 md:mt-8 '>
       
-      <div className='m-2 p-2 sm:m-12 sm:p-12 md:m-8 md:p-8 flex justify-center flex-col items-center'>
+      <div className='m-2 p-2 sm:m-12 sm:p-12 md:m-8 md:p-8 flex justify-center flex-col items-center bg-table-bg rounded-2xl shadow-xl'>
         <div className=''>
             <Toast ref={toast} className='mt-24 md:mt-12'/>
             <ConfirmDialog />    
