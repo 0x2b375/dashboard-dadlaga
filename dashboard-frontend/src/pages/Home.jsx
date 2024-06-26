@@ -5,7 +5,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import Button from '../components/Button';
 import { earningData } from '../data/dummy';
 import Map from '../data/map';
-
+import { ChartsLegend } from '@mui/x-charts';
 
 const years = [
   new Date(1990, 0, 1),
@@ -63,16 +63,25 @@ const GermanyGDPperCapita = [
 const Home = () => {
   return (
     <div className="mt-12">
-      <div className="flex flex-wrap justify-center flex-col m-8">
-        <div className="flex bg-table-bg w-full rounded-2xl shadow-xl">
+      <div className="flex flex-wrap justify-center flex-col m-8 ">
+        <div className="flex bg-table-bg w-full rounded-2xl shadow-xl ">
               <LineChart
+              
               xAxis={[
                 {
                   id: 'Years',
                   data: years,
                   scaleType: 'time',
                   valueFormatter: (date) => date.getFullYear().toString(),
+                  axisLabelStyle: { fill: 'white' },
+                  tickLabelStyle: { fill: 'white' },
                 },
+              ]}
+              yAxis={[
+                {
+                  axisLabelStyle: { fill: 'white' }, 
+                  tickLabelStyle: { fill: 'white' }, 
+                }
               ]}
               series={[
                 {
@@ -103,6 +112,15 @@ const Home = () => {
               width={1000}
               height={500}
               margin={{ left: 70 }}
+              slotProps={{
+                legend: {
+                  labelStyle: { fill: 'white' }
+                },
+                tooltip: {
+                  labelStyle: { fill: 'white' },
+                  contentStyle: { backgroundColor: 'rgba(0, 0, 0, 0.7)' } 
+                }
+              }}
             />
         </div>
       </div>

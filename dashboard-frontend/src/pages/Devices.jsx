@@ -231,8 +231,8 @@ const Devices = () => {
   }, [startDate, endDate, viewData]);
   
   const columns = [
-    { field: 'device_id', headerName: 'Төхөөрөмжийн ID', flex:1, headerAlign: 'start', headerClassName: 'super-app-theme--header',},
-    { field: 'serial_number', headerName: 'Дугаар', headerAlign: 'start', flex:1,},
+    { field: 'device_id', headerName: 'Төхөөрөмжийн ID', flex:2, headerAlign: 'start', headerClassName: 'super-app-theme--header',},
+    { field: 'serial_number', headerName: 'Дугаар', headerAlign: 'start', flex:2,},
     { field: 'device_type', headerName: 'Төрөл', headerAlign: 'start', flex:1,
       renderCell: (params) => (
         <span style={{ color: params.value === 'Халуун' ? 'red' : 'blue' }}>{params.value}</span>
@@ -247,7 +247,7 @@ const Devices = () => {
     { field: 'device_user_id', headerName: 'Хэрэглэгчийн ID', headerAlign: 'start', flex:1,},
     { field: 'device_user_geolocation_latitude', headerName: 'Өргөрөг', headerAlign: 'start', flex:1,},
     { field: 'device_user_geolocation_longitude', headerName: 'Уртраг', headerAlign: 'start', flex:1,},
-    { field: 'received_datetime', headerName: 'Сүүлд шинэчлэгдсэн хугацаа', headerAlign: 'start', flex:1,},
+    { field: 'received_datetime', headerName: 'Сүүлд шинэчлэгдсэн хугацаа', headerAlign: 'start', flex:2,},
     {
       field: 'actions',
       headerName: 'Үйлдэл',
