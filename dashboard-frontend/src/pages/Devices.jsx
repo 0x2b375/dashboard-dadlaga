@@ -481,7 +481,7 @@ const Devices = () => {
                         },
                       })
                         .then(response => {
-                          showAlert('Хэрэглэгчийн мэдээллийг ажмилттай устгалаа.'); 
+                          showAlert('Хэрэглэгчийн мэдээллийг амжилттай устгалаа.'); 
                           setData(prevData => 
                             prevData.map(device => 
                               device.device_id === selectedDevice.device_id 
@@ -536,7 +536,7 @@ const Devices = () => {
                           },
                         })
                           .then(response => {
-                            showAlert('Хэрэглэгчийн мэдээллийг ажмилттай өөрчиллөө.'); 
+                            showAlert('Хэрэглэгчийн мэдээллийг амжилттай өөрчиллөө.'); 
                             setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
                           })
                           .catch(error => {
