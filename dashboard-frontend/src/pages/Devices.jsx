@@ -58,8 +58,8 @@ const Devices = () => {
     toast.current.show({ severity: 'success', summary: 'Баталгаажлаа', detail: msg, life: 3000 });
   }
 
-  const reject = () => {
-      toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000, });
+  const reject = (msg) => {
+      toast.current.show({ severity: 'warn', summary: 'Амжилтгүй', detail: msg, life: 3000, });
   }
 
   const confirm1 = (msg, alertMsg) => {
@@ -373,6 +373,7 @@ const Devices = () => {
 
                           })
                           .catch(error => {
+                            reject('Хүсэлт амжилтгүй боллоо.')
                             console.error('Error', error);
                           });
                     
@@ -424,6 +425,7 @@ const Devices = () => {
                             );
                           })
                           .catch(error => {
+                            reject('Хүсэлт амжилтгүй боллоо.')
                             console.error('Error', error);
                           });
 
@@ -480,6 +482,7 @@ const Devices = () => {
                           );
                         })
                         .catch(error => {
+                          reject('Хүсэлт амжилтгүй боллоо.')
                           console.error('Error', error);
                         });
                   
@@ -529,6 +532,7 @@ const Devices = () => {
                             setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
                           })
                           .catch(error => {
+                            reject('Хүсэлт амжилтгүй боллоо.')
                             console.error('Error', error);
                           });
                     
@@ -558,9 +562,6 @@ const Devices = () => {
                   <Box display="flex" justifyContent="space-between" alignItems="center">
                     <div>Төхөөрөмжийн мэдээлэл</div>
                     <Box display="flex" justifyContent="end">
-                      {/* <button className='text-gray-600 mr-4' onClick={confirm1('Тоолуурын хаалт нээх хүсэлт илгээхдээ итгэлтэй байна уу?','Тоолуурын хаалт нээх хүсэлт амжилттай илгээгдлээ.')}>
-                        <MdWaterDrop className='rounded-xl hover:bg-gray-300 text-xl'/>
-                      </button> */}
                       <button 
                         className='text-gray-600 mr-4' 
                         onClick={() => {
@@ -583,7 +584,7 @@ const Devices = () => {
                              
                             })
                             .catch(error => {
-                              handleClose();
+                              reject('Хүсэлт амжилтгүй боллоо.')
                               console.error('Error', error);
                             });
                           handleClose();
@@ -597,6 +598,33 @@ const Devices = () => {
                       <button 
                         className='text-gray-600'
                         disabled={!selectedDevice.device_user_id}
+                        onClick={() => {
+                          const dataToSend = {
+                            device_id: selectedDevice.device_id,
+                            status_value: 'close',
+                          }
+
+                          axios.post('http://localhost:3001/api/device/status', dataToSend, {
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                          })
+                            .then(response => {
+                              console.log(response)
+                              if (response.status === 200) {
+                                confirm1('Тоолуурын хаалт хаах хүсэлт илгээхдээ итгэлтэй байна уу?','Тоолуурын хаалт хаах хүсэлт амжилттай илгээгдлээ.') 
+                                setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
+                              }
+                             
+                            })
+                            .catch(error => {
+                              reject('Хүсэлт амжилтгүй боллоо.')
+                              console.error('Error', error);
+                            });
+                          handleClose();
+
+                          
+                        }}
                       >
                         <MdOutlineInvertColorsOff className='rounded-xl hover:bg-gray-300 text-xl'/>
                       </button>
