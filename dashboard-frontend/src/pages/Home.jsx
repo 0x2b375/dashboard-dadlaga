@@ -63,8 +63,8 @@ const GermanyGDPperCapita = [
 const Home = () => {
   return (
     <div className="mt-12">
-      <div className="flex flex-wrap justify-center flex-col m-8 overflow-auto ">
-        <div className="mt-12 flex bg-table-bg rounded-2xl w-full shadow-sm">
+      <div className="flex flex-wrap justify-center flex-col m-8">
+        <div className="flex bg-table-bg w-full rounded-2xl shadow-xl">
               <LineChart
               xAxis={[
                 {
