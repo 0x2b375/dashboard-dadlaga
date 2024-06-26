@@ -82,11 +82,13 @@ const Devices = () => {
         if (response.status === 200) {
           // const newRequestCount = requestCount + 1;
           // localStorage.setItem('requestCount', newRequestCount.toString());
-          
+
+          console.log(response.data.response_datetime)
+
           if (statusValue === 'open') {
-            confirm1('Тоолуурын хаалт нээх хүсэлт илгээхдээ итгэлтэй байна уу?', 'Тоолуурын хаалт нээх хүсэлт амжилттай илгээгдлээ.');
+            confirm1('Тоолуурын хаалт нээх хүсэлт илгээхдээ итгэлтэй байна уу?', 'Тоолуурын хаалт нээх хүсэлт амжилттай илгээгдлээ.', 'Хүсэлт амжилтгүй боллоо.');
           } else {
-            confirm1('Тоолуурын хаалт хаах хүсэлт илгээхдээ итгэлтэй байна уу?', 'Тоолуурын хаалт хаах хүсэлт амжилттай илгээгдлээ.');
+            confirm1('Тоолуурын хаалт хаах хүсэлт илгээхдээ итгэлтэй байна уу?', 'Тоолуурын хаалт хаах хүсэлт амжилттай илгээгдлээ.', 'Хүсэлт амжилтгүй боллоо.');
           }
           
           setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
@@ -113,7 +115,7 @@ const Devices = () => {
   }
 
   const reject = (msg) => {
-      toast.current.show({ severity: 'warn', summary: 'Амжилтгүй', detail: msg, life: 3000, });
+      toast.current.show({ severity: 'warn', summary: 'Амжилтгүй', detail: msg, life: 3000 });
   }
 
   const confirm1 = (msg, acceptMsg, rejectMsg) => {
