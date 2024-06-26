@@ -59,6 +59,15 @@ const Devices = () => {
       setAlertOpen(false);
     }, 5000); 
   };
+  const showErrorAlert = (message) => {
+    setAlertMsg(message);
+    setAlertOpen(true);
+
+    setTimeout(() => {
+      setAlertOpen(false);
+    }, 5000); 
+  };
+
 
   const handleReset = () => {
     setStartDate('')
@@ -214,53 +223,55 @@ const Devices = () => {
   ];
 
   return (
-    <div className='flex flex-col mt-12'>
-      <div className='m-2 md:m-8 p-2 md:p-8 flex justify-center flex-col items-center h-screen overflow-x-auto flex-1 relative'>
-        <div style={{ width:'100%'}}>
-          <DataGrid
-            rows={data}
-            rowHeight={45}
-            autoHeight
-            columns={columns}
-            checkboxSelection
-            disableRowSelectionOnClick
-            getRowId={(row) => row.device_id}
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 10, page: 0 }, 
-              },
-            }}
-            pageSizeOptions={[5, 10, 20, 50]} 
-            slots={{toolbar: GridToolbar}}
-            sx={{
-              borderColor: ''
-            }}
-          />
-        </div>
-        <div className='relative top-0'>
-          {alertMsg && (
-            <Collapse in={alertOpen} className='mt-4'>
-            <Alert
-              
-              severity="success"
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  size="small"
-                  onClick={() => setAlertOpen(false)}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-            >
-              {alertMsg}
-            </Alert>
-          </Collapse>
-          )}
-          
-        </div>
-        
+    <div className='h-screen overflow-auto'>
+      
+      <div className='m-4 p-2 md:p-8 flex justify-center flex-col items-center'>
+        <div className=''>
+            {alertMsg && (
+              <Collapse in={alertOpen} className='m-4'>
+              <Alert
+                
+                severity="success"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => setAlertOpen(false)}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                {alertMsg}
+              </Alert>
+            </Collapse>
+            )}
+            
+          </div>
+        <Box sx={{ overflow: "auto" }}>
+          <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
+            <DataGrid
+              rows={data}
+              rowHeight={45}
+              autoHeight
+              columns={columns}
+              checkboxSelection
+              disableRowSelectionOnClick
+              getRowId={(row) => row.device_id}
+              initialState={{
+                pagination: {
+                  paginationModel: { pageSize: 10, page: 0 }, 
+                },
+              }}
+              pageSizeOptions={[5, 10, 20, 50]} 
+              slots={{toolbar: GridToolbar}}
+              sx={{
+                borderColor: ''
+              }}
+            />
+          </Box>
+        </Box>
         <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
           <DialogTitle>{action === 'add' ? 'Төхөөрөмжийн мэдээлэл' : ''}</DialogTitle>
           <DialogContent>
@@ -414,7 +425,7 @@ const Devices = () => {
                           },
                         })
                           .then(response => {
-                            console.log('Backend Response:', response.data);
+                            showAlert('Хэрэглэгчийн мэдээллийг ажмилттай устгалаа.'); 
                             setData(prevData => 
                               prevData.map(device => 
                                 device.device_id === selectedDevice.device_id 
@@ -470,7 +481,7 @@ const Devices = () => {
                         },
                       })
                         .then(response => {
-                          console.log('Backend Response:', response.data);
+                          showAlert('Хэрэглэгчийн мэдээллийг ажмилттай устгалаа.'); 
                           setData(prevData => 
                             prevData.map(device => 
                               device.device_id === selectedDevice.device_id 
@@ -525,7 +536,7 @@ const Devices = () => {
                           },
                         })
                           .then(response => {
-                            console.log('Backend Response:', response.data);
+                            showAlert('Хэрэглэгчийн мэдээллийг ажмилттай өөрчиллөө.'); 
                             setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
                           })
                           .catch(error => {
