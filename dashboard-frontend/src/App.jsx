@@ -7,7 +7,6 @@ import { Devices, Area, Bar, Line, Pie, Dashboard, Home } from './pages'
 import {useStateContext} from './contexts/ContextProvider'
 import './App.css';
 import Map from './data/map';
-
 const App = () => {
   const {activeMenu} = useStateContext();
   return (

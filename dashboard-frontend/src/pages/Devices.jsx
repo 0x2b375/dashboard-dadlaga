@@ -4,11 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { Header } from '../components';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Button, Grid, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Drawer  } from '@mui/material';
+import { Button, Grid, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Drawer, Collapse, IconButton  } from '@mui/material';
 import { PiUserCirclePlusFill } from "react-icons/pi";
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { MdOutlineInvertColorsOff } from "react-icons/md";
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 import { MdWaterDrop } from "react-icons/md";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -23,10 +25,14 @@ import { BsEyeFill } from "react-icons/bs";
 import Map from '../data/map';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import { useStateContext } from '../contexts/ContextProvider';
+import CloseIcon from '@mui/icons-material/Close'
+
 
 
 const Devices = () => {
   const [filteredViewData, setFilteredViewData] = useState([]);
+  const [alertOpen, setAlertOpen] = useState([false]);
+  const [alertMsg, setAlertMsg] = useState('')
   const [action, setAction] = useState('');
   const [data, setData] = useState([]);
   const [viewData, setViewData] = useState([])
@@ -37,11 +43,21 @@ const Devices = () => {
   const [mapVisible, setMapVisible] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState('');
   const [position, setPosition] = useState([47.91885,106.91760]);
+
   const handleClickOpen = (device) => {
     setOpen(true);
     setSelectedDevice(device);
     setPosition([47.91885,106.91760])
     setAction('add')
+  };
+
+  const showAlert = (message) => {
+    setAlertMsg(message);
+    setAlertOpen(true);
+
+    setTimeout(() => {
+      setAlertOpen(false);
+    }, 5000); 
   };
 
   const handleReset = () => {
@@ -199,7 +215,7 @@ const Devices = () => {
 
   return (
     <div className='flex flex-col mt-12'>
-      <div className='m-2 md:m-8 p-2 md:p-8 flex justify-center flex-col items-center h-screen overflow-hidden flex-1 relative'>
+      <div className='m-2 md:m-8 p-2 md:p-8 flex justify-center flex-col items-center h-screen overflow-x-auto flex-1 relative'>
         <div style={{ width:'100%'}}>
           <DataGrid
             rows={data}
@@ -221,6 +237,30 @@ const Devices = () => {
             }}
           />
         </div>
+        <div className='relative top-0'>
+          {alertMsg && (
+            <Collapse in={alertOpen} className='mt-4'>
+            <Alert
+              
+              severity="success"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => setAlertOpen(false)}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+            >
+              {alertMsg}
+            </Alert>
+          </Collapse>
+          )}
+          
+        </div>
+        
         <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
           <DialogTitle>{action === 'add' ? 'Төхөөрөмжийн мэдээлэл' : ''}</DialogTitle>
           <DialogContent>
@@ -321,7 +361,7 @@ const Devices = () => {
                           },
                         })
                           .then(response => {
-                            console.log('Backend Response:', response.data);
+                            showAlert('Хэрэглэгчийг амжилттай нэмлээ'); 
                             setData(prevData => 
                               prevData.map(device => 
                                 device.device_id === selectedDevice.device_id 
@@ -329,6 +369,8 @@ const Devices = () => {
                                   : device
                               )
                             );
+                           
+
                           })
                           .catch(error => {
                             console.error('Error', error);
