@@ -307,6 +307,24 @@ const Devices = () => {
               }}
               pageSizeOptions={[5, 10, 20, 50]} 
               slots={{toolbar: GridToolbar}}
+              sx={{
+                '& .MuiDataGrid-cell': {
+                  color: 'rgba(255, 255, 255, 0.767)',
+                  borderTopColor:'rgba(255, 255, 255, 0.10)',
+                },
+                '& .MuiDataGrid-columnHeaders': {
+                  color:'rgba(255, 255, 255, 0.767)',
+                  
+                },
+                '& .MuiDataGrid-columnHeader': {
+                  backgroundColor: '#21212d',
+                  
+                },
+                '& .MuiDataGrid-footerContainer': {
+                  borderTop: '1px solid rgba(255, 255, 255, 0.10)'
+                },
+                border: 'none',
+              }}
             />
           </Box>
         </Box>

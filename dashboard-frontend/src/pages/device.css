@@ -1,3 +1,5 @@
+
+
 .custom-accept-button {
   background-color: #2d53da; 
   border: 1px solid #2d53da;
@@ -22,7 +24,22 @@
   justify-content: center !important;
 }
 
-.css-n3fyjk-MuiDataGrid-root .MuiDataGrid-container--top [role=row], .css-n3fyjk-MuiDataGrid-root .MuiDataGrid-container--bottom [role=row] {
-  background-color: #4b4d60 !important;
-  color: white;
+.css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar {
+  color: rgba(255, 255, 255, 0.767) !important;
+}
+
+.css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar .MuiTablePagination-actions {
+  color: rgba(255, 255, 255, 0.767) !important;
+}
+
+.css-zylse7-MuiButtonBase-root-MuiIconButton-root.Mui-disabled {
+  color: rgba(255, 255, 255, 0.767) !important;
+}
+
+.css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon {
+  color: rgba(255, 255, 255, 0.767) !important;
+}
+
+.css-1knaqv7-MuiButtonBase-root-MuiButton-root {
+  color: rgba(255, 255, 255, 0.767) !important;
 }
