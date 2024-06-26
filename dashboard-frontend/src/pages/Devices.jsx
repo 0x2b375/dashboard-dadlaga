@@ -571,9 +571,31 @@ const Devices = () => {
                       <button 
                         className='text-gray-600 mr-4' 
                         onClick={() => {
-                          
-                          console.log('YOU CLICKED ON IT!')
+                          const dataToSend = {
+                            device_id: selectedDevice.device_id,
+                            status_value: 'open',
+                          }
+
+                          axios.post('http://localhost:3001/api/device/status', dataToSend, {
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                          })
+                            .then(response => {
+                              console.log(response)
+                              if (response.status === 200) {
+                                showAlert('Тоолуурын хаалт нээх хүсэлт илгээгдсэн.'); 
+                                setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
+                              }
+                             
+                            })
+                            .catch(error => {
+                              handleClose();
+                              console.error('Error', error);
+                            });
                           handleClose();
+
+                          
                         }}
                         disabled={!selectedDevice.device_user_id} 
                       >
