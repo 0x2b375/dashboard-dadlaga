@@ -12,12 +12,12 @@ export default {
         14: '14px',
       },
       backgroundColor: {
-        'main-bg': '#f1f4fc',
+        'main-bg': '#ebf0fa',
         'main-dark-bg': '#20232A',
         'secondary-dark-bg': '#33373E',
         'light-gray': '#F7F7F7',
         'half-transparent': 'rgba(0, 0, 0, 0.5)',
-        'table-bg': 'rgb(242, 240, 240)'
+        'table-bg': '#ffffff'
       },
       borderWidth: {
         1: '1px',
