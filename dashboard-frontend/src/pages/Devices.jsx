@@ -101,6 +101,7 @@ const Devices = () => {
   const handleClickOpen = (device) => {
     setOpen(true);
     setSelectedDevice(device);
+    setUserId('')
     setPosition([47.91885,106.91760])
     setAction('add')
   };
@@ -320,69 +321,36 @@ const Devices = () => {
             <div className='mt-2'>
               {action === 'add' && (
                 <Grid container spacing={2}>
+                  <TableContainer>
+                      <Table sx={{minWidth:500}} aria-label='simple table'>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Төхөөрөмжийн ID</TableCell>
+                            <TableCell>Төхөөрөмжийн дугаар</TableCell>
+                            <TableCell>Төрөл</TableCell>
+                            <TableCell>Заалт</TableCell>
+                            <TableCell>Он сар</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          <TableRow>
+                                <TableCell>{selectedDevice.device_id}</TableCell>
+                                <TableCell>{selectedDevice.serial_number}</TableCell>
+                                <TableCell>{selectedDevice.device_type}</TableCell>
+                                <TableCell>{selectedDevice.cumulative_flow}</TableCell>
+                                <TableCell>{selectedDevice.received_datetime}</TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
                   <Grid item xs={12}>
-                    <TextField
-                      label="Төхөөрөмжийн ID"
-                      fullWidth
-                      variant="outlined"
-                      value={selectedDevice.device_id}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Дугаар"
-                      fullWidth
-                      variant="outlined"
-                      value={selectedDevice.serial_number}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Төрөл"
-                      fullWidth
-                      variant="outlined"
-                      value={selectedDevice.device_type}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Заалт"
-                      fullWidth
-                      variant="outlined"
-                      value={selectedDevice.cumulative_flow}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Он сар"
-                      fullWidth
-                      variant="outlined"
-                      value={selectedDevice.received_datetime}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box display="flex" justifyContent="space-between">
+                    <Box display="flex">
                       <TextField
                         margin="dense"
                         required
                         label="Хэрэглэгчийн ID"
                         variant="outlined"
-                        style={{ flex: 1, marginRight: '10px' }}
+                        style={{ marginRight: '10px' }}
                         value={userId}
                         onChange={(e) => setUserId(e.target.value)}
                       />
@@ -390,52 +358,50 @@ const Devices = () => {
                         margin="dense"
                         required
                         label="Хаяг"
-                        variant="outlined"
                         style={{ flex: 1 }}
+                        variant="standard"
                         value={`${selectedDevice.device_user_geolocation_latitude || ''} ${selectedDevice.device_user_geolocation_longitude || ''}`}
                         InputProps={{
                           readOnly: true,
                         }}
                       />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box display="flex" justifyContent="space-between">
-                      <Button onClick={handleMapVisible}>ГАЗРЫН ЗУРАГ</Button>
-                      <Button onClick={()=> {
-                        const dataToSend = {
-                          device_id: selectedDevice.device_id,
-                          device_user_id: userId, 
-                          device_user_geolocation_latitude: selectedDevice.device_user_geolocation_latitude,
-                          device_user_geolocation_longitude: selectedDevice.device_user_geolocation_longitude,
-                        };
-                    
-                        axios.post('http://localhost:3001/api/user', dataToSend, {
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                        })
-                          .then(response => {
-                            accept('Хэрэглэгчийг амжилттай нэмлээ'); 
-                            setData(prevData => 
-                              prevData.map(device => 
-                                device.device_id === selectedDevice.device_id 
-                                  ? { ...device, ...dataToSend } 
-                                  : device
-                              )
-                            );
-                           
-
+                       <Box display="flex" gap="1rem">
+                        <Button onClick={handleMapVisible}>ГАЗРЫН ЗУРАГ</Button>
+                        <Button onClick={()=> {
+                          const dataToSend = {
+                            device_id: selectedDevice.device_id,
+                            device_user_id: userId, 
+                            device_user_geolocation_latitude: selectedDevice.device_user_geolocation_latitude,
+                            device_user_geolocation_longitude: selectedDevice.device_user_geolocation_longitude,
+                          };
+                      
+                          axios.post('http://localhost:3001/api/user', dataToSend, {
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
                           })
-                          .catch(error => {
-                            reject('Хүсэлт амжилтгүй боллоо.')
-                            console.error('Error', error);
-                          });
-                    
-                        handleClose();
-                      }}>НЭМЭХ</Button>
-                    </Box>
-                  </Grid>
+                            .then(response => {
+                              accept('Хэрэглэгчийг амжилттай нэмлээ'); 
+                              setData(prevData => 
+                                prevData.map(device => 
+                                  device.device_id === selectedDevice.device_id 
+                                    ? { ...device, ...dataToSend } 
+                                    : device
+                                )
+                              );
+                            
+
+                            })
+                            .catch(error => {
+                              reject('Хүсэлт амжилтгүй боллоо.')
+                              console.error('Error', error);
+                            });
+                      
+                          handleClose();
+                        }}>НЭМЭХ</Button>
+                      </Box>
+                      </Box>
+                    </Grid>
                   {mapVisible && (
                     <Grid item xs={20}>
                       <Box mt={2} height="500px">
@@ -560,7 +526,7 @@ const Devices = () => {
                       <TextField
                         margin="dense"
                         label="Хаяг"
-                        variant="outlined"
+                        variant="standard"
                         style={{ flex: 1, maxWidth: '300px' }}
                         value={`${selectedDevice.device_user_geolocation_latitude || ''} ${selectedDevice.device_user_geolocation_longitude || ''}`}
                         InputProps={{
