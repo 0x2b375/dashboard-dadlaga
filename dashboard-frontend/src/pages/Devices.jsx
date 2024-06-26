@@ -105,7 +105,6 @@ const Devices = () => {
     })
       .then(response=> {
         setViewData(response.data.body)
-        console.log('Backend Response:', response.data);
       }).catch(error => {
         console.error('Error', error);
       });
