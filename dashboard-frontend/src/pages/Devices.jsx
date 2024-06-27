@@ -67,6 +67,10 @@ const Devices = () => {
   //   return;
   // }
 
+  const getStatusText = (status) => {
+    return status === 'open' ? 'нээлттэй' : 'хаалттай'
+  }
+
   const handleClickOpen = (device) => {
     setOpen(true);
     setSelectedDevice(device);
@@ -241,7 +245,7 @@ const Devices = () => {
     },
     { field: 'status', headerName: 'Төлөв', headerAlign: 'start', flex:1,
       renderCell: (params) => (
-        <span>{params.value === 'open' ? 'Нээлттэй' : 'Хаалттай'}</span>
+        <span>{getStatusText(params.value)}</span>
       ),
     },
     { field: 'cumulative_flow', headerName: 'Заалт', headerAlign: 'start', flex:1, },
@@ -297,7 +301,7 @@ const Devices = () => {
   });
 
   return (
-    <div className={`h-screen overflow-auto mt-32 md:mt-8 ${darkMode && 'dark'}`}>
+    <div className={`h-screen overflow-auto ${darkMode && 'dark'}`}>
       <div className='m-2 p-2 sm:m-12 sm:p-12 md:m-8 md:p-8 flex justify-center flex-col items-center dark:bg-table-bg bg-white rounded-2xl shadow-xl'>
         <div className=''>
             <Toast ref={toast} className='mt-24 md:mt-12'/>
@@ -355,34 +359,34 @@ const Devices = () => {
           </Box>
         </createTheme>
         
-        <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-          <DialogTitle>{action === 'add' ? 'Төхөөрөмжийн мэдээлэл' : ''}</DialogTitle>
-          <DialogContent>
+        <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth className={`${darkMode && 'dark'}`}>
+          <DialogTitle className='dark:text-neutral-100 dark:bg-table-bg bg-white'>{action === 'add' ? 'Төхөөрөмжийн мэдээлэл' : ''}</DialogTitle>
+          <DialogContent className='dark:bg-table-bg bg-white'>
             <div className='mt-2'>
               {action === 'add' && (
                 <Grid container spacing={2}>
                   <TableContainer>
-                      <Table sx={{minWidth:500}} aria-label='simple table'>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Төхөөрөмжийн ID</TableCell>
-                            <TableCell>Төхөөрөмжийн дугаар</TableCell>
-                            <TableCell>Төрөл</TableCell>
-                            <TableCell>Заалт</TableCell>
-                            <TableCell>Он сар</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          <TableRow>
-                                <TableCell>{selectedDevice.device_id}</TableCell>
-                                <TableCell>{selectedDevice.serial_number}</TableCell>
-                                <TableCell>{selectedDevice.device_type}</TableCell>
-                                <TableCell>{selectedDevice.cumulative_flow}</TableCell>
-                                <TableCell>{selectedDevice.received_datetime}</TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                    <Table sx={{ minWidth: 500 }} aria-label='simple table'>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Төхөөрөмжийн ID</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Төхөөрөмжийн дугаар</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Төрөл</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Заалт</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Он сар</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{selectedDevice.device_id}</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{selectedDevice.serial_number}</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{selectedDevice.device_type}</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{selectedDevice.cumulative_flow}</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{selectedDevice.received_datetime}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                   <Grid item xs={12}>
                     <Box display="flex">
                       <TextField
@@ -393,6 +397,25 @@ const Devices = () => {
                         style={{ marginRight: '10px' }}
                         value={userId}
                         onChange={(e) => setUserId(e.target.value)}
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },
+                          '& .MuiInputLabel-root': {
+                            color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                            },
+                            '&:hover fieldset': {
+                              borderColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                            },
+                          },
+                        }}
                       />
                       <TextField
                         margin="dense"
@@ -403,11 +426,26 @@ const Devices = () => {
                         value={`${selectedDevice.device_user_geolocation_latitude || ''} ${selectedDevice.device_user_geolocation_longitude || ''}`}
                         InputProps={{
                           readOnly: true,
-                        }}
+                        }}               
+                        sx={{
+                          color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',          
+                          '& .MuiInputLabel-root': {
+                            color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },
+                          '& .MuiInput-underline:before': {
+                            borderBottomColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },
+                          '&:hover:not(.Mui-disabled):before': {
+                            borderBottomColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },
+                          '&.Mui-focused:after': {
+                            borderBottomColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
+                          },
+                        }}     
                       />
                        <Box display="flex" gap="1rem">
                         <Button onClick={handleMapVisible} >
-                          <p className='p-3 bg-main-bg rounded-lg hover:bg-slate-200 ml-2'>ГАЗРЫН ЗУРАГ</p>
+                          <p className='p-3 bg-blue-700 rounded-md hover:bg-blue-800 ml-2 text-neutral-100'>ГАЗРЫН ЗУРАГ</p>
                         </Button>
                         <Button onClick={()=> {
                           const dataToSend = {
@@ -441,7 +479,7 @@ const Devices = () => {
                       
                           handleClose();
                         }}>
-                          <p className='p-3 bg-main-bg rounded-lg hover:bg-slate-200'>НЭМЭХ</p>
+                          <p className='p-3 bg-blue-700 rounded-md hover:bg-blue-800 text-neutral-100'>НЭМЭХ</p>
                         </Button>
                       </Box>
                       </Box>
@@ -703,8 +741,8 @@ const Devices = () => {
                               <TableRow key={dev.device_id} sx={{'&:last-child td, &:last-child th': { border: 0 }}}>
                                   <TableCell>{dev.received_datetime}</TableCell>
                                   <TableCell>{dev.cumulative_flow}</TableCell>
-                                  <TableCell>{dev.status}</TableCell>
-                                  <TableCell>battery: {dev.battery_status}V</TableCell>
+                                  <TableCell>{getStatusText(dev.status)}</TableCell>
+                                  <TableCell>Баттерэй: {dev.battery_status}V</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -716,8 +754,8 @@ const Devices = () => {
               )}
             </div>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} style={{color:'black'}}>Хаах</Button>
+          <DialogActions className='dark:bg-table-bg bg-white'>
+            <Button onClick={handleClose} style={{color: darkMode ? 'white' : 'black' }}>Хаах</Button>
           </DialogActions>
         </Dialog>
       </div>
