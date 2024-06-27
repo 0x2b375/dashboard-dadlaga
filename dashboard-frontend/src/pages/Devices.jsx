@@ -52,27 +52,30 @@ const Devices = () => {
   const toast = useRef(null);
   const {darkMode} = useStateContext();
   const [userIdError, setUserIdError] = useState('');
-  const [addressError, setAddressError] = useState('');
+  const [locationError, setLocationError] = useState('')
+  const [location, setlocation] = useState('')
 
   const handleUserIdChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value
     setUserId(value);
 
     if (!value.trim()) {
-      setUserIdError('Хэрэглэгчийн ID хоосон байж болохгүй.');
+      setUserIdError(true);
     } else {
-      setUserIdError('');
+      setUserIdError(false);
     }
   };
-  
-  const validateAddress = () => {
-    const { device_user_geolocation_latitude, device_user_geolocation_longitude } = selectedDevice;
-    if (!device_user_geolocation_latitude || !device_user_geolocation_longitude) {
-      setAddressError('Хаяг хоосон байж болохгүй.');
+
+  const handleLocationChange = () => {
+    
+    if (selectedDevice.device_user_geolocation_latitude === null) {
+      setLocationError(true);
     } else {
-      setAddressError('');
+      setLocationError(false);
     }
   };
+
+
 
   const getStatusText = (status) => {
     return status === 'open' ? 'нээлттэй' : 'хаалттай'
@@ -83,6 +86,8 @@ const Devices = () => {
     setSelectedDevice(device);
     setUserId('')
     setPosition([47.91885,106.91760])
+    setUserIdError(false)
+    setLocationError(false)
     setAction('add')
   };
 
@@ -404,8 +409,8 @@ const Devices = () => {
                         style={{ marginRight: '10px' }}
                         value={userId}
                         onChange={handleUserIdChange}
-                        error={!!userIdError}
-                        helperText={userIdError}
+                        error={userIdError}
+                        helperText={userIdError ? 'Хэрэглэгчийн ID хоосон байж болохгүй' : ''}
                         sx={{
                           '& .MuiInputBase-input': {
                             color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
@@ -431,11 +436,14 @@ const Devices = () => {
                         required
                         label="Хаяг"
                         style={{ flex: 1 }}
-                        variant="standard"
+                        variant="outlined"
                         value={`${selectedDevice.device_user_geolocation_latitude || ''} ${selectedDevice.device_user_geolocation_longitude || ''}`}
                         InputProps={{
                           readOnly: true,
-                        }}               
+                        }}
+                        onChange={handleLocationChange}               
+                        error={locationError}
+                        helperText={locationError ? "Хэрэглэгчийн хаяг хоосон байж болохгүй" : ""}
                         sx={{
                           '& .MuiInputBase-input': {
                             color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
@@ -465,6 +473,23 @@ const Devices = () => {
                             device_user_geolocation_latitude: selectedDevice.device_user_geolocation_latitude,
                             device_user_geolocation_longitude: selectedDevice.device_user_geolocation_longitude,
                           };
+
+                          let hasError = false;
+                          
+                          if (userId === '') {
+                            setUserIdError(true)
+                            hasError = true;
+                            
+                          }
+                          if(selectedDevice.device_user_geolocation_latitude === null) {
+                            setLocationError(true)  
+                            hasError = true;
+                          }
+
+                          if (hasError) {
+                            return;
+                          }
+
                       
                           axios.post('http://localhost:3001/api/user', dataToSend, {
                             headers: {
