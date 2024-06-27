@@ -261,7 +261,7 @@ const Devices = () => {
             onClick={() => handleMap(params.row)}
             className='m-3 text-gray-main'
           >
-            <IoIosGlobe className='rounded-xl hover:text-white text-xl' />
+            <IoIosGlobe className='rounded-xl dark:hover:text-white hover:text-slate-900 text-xl' />
           </button>
         ) : (
           <button
@@ -269,7 +269,7 @@ const Devices = () => {
             onClick={() => handleClickOpen(params.row)}
             className='m-3 text-gray-main'
           >
-            <PiUserCirclePlusFill className='rounded-xl hover:text-white text-xl' />
+            <PiUserCirclePlusFill className='rounded-xl dark:hover:text-white text-xl hover:text-slate-900' />
           </button>
         )}
           <button
@@ -277,7 +277,7 @@ const Devices = () => {
             className='text-gray-main'
             onClick={() => handleView(params.row)}
           >
-            <BsEyeFill className='rounded-xl hover:text-white text-xl'/>
+            <BsEyeFill className='rounded-xl dark:hover:text-white hover:text-slate-900 text-xl'/>
           </button>
         </div>
       ),
@@ -328,6 +328,7 @@ const Devices = () => {
                   },
                   '& .MuiDataGrid-columnHeaders': {
                     color: darkMode ? 'rgba(255, 255, 255, 0.867)' : 'rgba(0, 0, 0, 0.9)',
+                    fontSize: '1rem'
                   },
                   '& .MuiDataGrid-columnHeader': {
                     backgroundColor: darkMode ? '#21212d' : 'white',
