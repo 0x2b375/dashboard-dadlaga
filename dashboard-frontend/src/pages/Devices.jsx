@@ -236,7 +236,7 @@ const Devices = () => {
     { field: 'serial_number', headerName: 'Дугаар', headerAlign: 'start', flex:2,},
     { field: 'device_type', headerName: 'Төрөл', headerAlign: 'start', flex:1,
       renderCell: (params) => (
-        <span style={{ color: params.value === 'Халуун' ? 'red' : 'blue' }}>{params.value}</span>
+        <span style={{ backgroundColor: params.value === 'Халуун' ? 'red' : 'blue', borderRadius:'0.3rem', padding: '0.3rem' }}>{params.value}</span>
       ),
     },
     { field: 'status', headerName: 'Төлөв', headerAlign: 'start', flex:1,
