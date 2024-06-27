@@ -10,6 +10,8 @@ import { RiNotification3Line } from 'react-icons/ri'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import {Notification, UserProfile} from '.'
 import {useStateContext} from '../contexts/ContextProvider'
+import { PiMoonFill } from "react-icons/pi";
+import { IoSunny } from "react-icons/io5";
 
 
 const NavButton = ({title, customFunc, icon, color, dotColor}) => (
@@ -22,7 +24,7 @@ const NavButton = ({title, customFunc, icon, color, dotColor}) => (
 
 
 const Navbar = () => {
-  const {activeMenu, setActiveMenu, isClicked, setisClicked, handleClick, screenSize, setScreenSize} = useStateContext();
+  const {activeMenu, setActiveMenu, isClicked, setisClicked, handleClick, screenSize, setScreenSize, darkMode, setDarkMode} = useStateContext();
 
   useEffect(()=>{
     const handleResize = () => setScreenSize(window.innerWidth)
@@ -33,6 +35,11 @@ const Navbar = () => {
 
     return () => window.removeEventListener('resize', handleResize)
   }, []);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  }
+
 
   useEffect(()=> {
     if(screenSize<=900) {
@@ -53,7 +60,11 @@ const Navbar = () => {
         <NavButton title='Notification' 
           customFunc={()=>handleClick('notification')} 
           icon={<RiNotification3Line/>}
-          />
+        />
+        <button  type='button' onClick={toggleDarkMode} className='relative flex justify-center items-center text-xl rounded-full p-3 hover:bg-slate-200 hover:text-slate-900'>
+        <span className='absolute inline-flex w-4 h-4 top-2 right-2'></span>
+         {darkMode ? <IoSunny/> : <PiMoonFill/>}
+      </button>
         <div className='flex items-center gap-2 cursor-pointer p-1 hover:bg-slate-200 text-slate-9600 rounded-lg' onClick={()=>handleClick('userProfile')}>
           <img src='https://github.com/adrianhajdin/project_syncfusion_dashboard/blob/main/src/data/avatar.jpg?raw=true' alt="" className='rounded-full w-8 h-8'/>
           <MdKeyboardArrowDown className='text-gray-400 text-14'/>

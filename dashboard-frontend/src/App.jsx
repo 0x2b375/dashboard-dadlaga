@@ -9,21 +9,21 @@ import './App.css';
 import Map from './data/map';
 import NotFoundPage from './components/NotFoundPage';
 const App = () => {
-  const {activeMenu} = useStateContext();
+  const {activeMenu, darkMode} = useStateContext();
   return (
     <BrowserRouter>
-      <div className='flex relative dark:bg-main-dark-bg z-0'>
+      <div className={`flex relative z-0 ${darkMode && 'dark'}`}>
         {activeMenu ? (
-          <div className='w-72 fixed sidebar dark:bg-secondary-dark-bg bg-secondary-bg'>
+          <div className='w-72 fixed sidebar dark:bg-secondary-bg bg-light-bg'>
             <Sidebar/>
           </div>
         ) : (
-          <div className='w-0 dark:bg-secondary-dark-bg'>
+          <div className='w-0 dark:bg-secondary-bg bg-light-bg'>
             <Sidebar />
           </div>
         )}
-        <div className={`dark:bg-main-dark-bg bg-main-bg min-h-screen w-full dark:text-white ${activeMenu ? 'md:ml-72' :'flex-2'}`}>
-          <div className='fixed md:static dark:bg-main-dark-bg navbar w-full bg-secondary-bg text-white'>
+        <div className={`dark:bg-main-bg dark:text-neutral-100 bg-light-bg min-h-screen w-full  ${activeMenu ? 'md:ml-72' :'flex-2'}`}>
+          <div className='fixed md:static dark:bg-secondary-bg dark:text-neutral-100 navbar w-full bg-light-bg text-gray-500'>
             <Navbar />
           </div>
         
