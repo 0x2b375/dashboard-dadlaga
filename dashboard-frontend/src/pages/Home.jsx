@@ -7,6 +7,7 @@ import { earningData } from '../data/dummy';
 import Map from '../data/map';
 import { ChartsLegend } from '@mui/x-charts';
 import { useStateContext } from '../contexts/ContextProvider';
+import { ChartsAxis } from '@mui/x-charts/ChartsAxis';
 
 const years = [
   new Date(1990, 0, 1),
@@ -120,7 +121,10 @@ const Home = () => {
                 legend: {
                   labelStyle: { fill: darkMode ? 'white' : 'black' }
                 },
-               
+                "& .MuiChartsAxis-root":{
+                  stroke: 'white'
+                },
+
               }}
             />
         </div>
