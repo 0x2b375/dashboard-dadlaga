@@ -51,21 +51,28 @@ const Devices = () => {
   const [position, setPosition] = useState([47.91885,106.91760]);
   const toast = useRef(null);
   const {darkMode} = useStateContext();
-  // useEffect(() => {
-  //   const today = new Date().toISOString().split('T')[0];
-  //   const storedDate = localStorage.getItem('requestDate');
+  const [userIdError, setUserIdError] = useState('');
+  const [addressError, setAddressError] = useState('');
 
-  //   if (storedDate !== today) {
-  //     localStorage.setItem('requestDate', today);
-  //     localStorage.setItem('requestCount', '0');
-  //   }
-  // }, []);
-  // const requestCount = parseInt(localStorage.getItem('requestCount'), 10);
-  // localStorage.clear()
-  // if (requestCount >= 3) {
-  //   alert('You have reached the maximum number of requests for today.');
-  //   return;
-  // }
+  const handleUserIdChange = (e) => {
+    const value = e.target.value;
+    setUserId(value);
+
+    if (!value.trim()) {
+      setUserIdError('Хэрэглэгчийн ID хоосон байж болохгүй.');
+    } else {
+      setUserIdError('');
+    }
+  };
+  
+  const validateAddress = () => {
+    const { device_user_geolocation_latitude, device_user_geolocation_longitude } = selectedDevice;
+    if (!device_user_geolocation_latitude || !device_user_geolocation_longitude) {
+      setAddressError('Хаяг хоосон байж болохгүй.');
+    } else {
+      setAddressError('');
+    }
+  };
 
   const getStatusText = (status) => {
     return status === 'open' ? 'нээлттэй' : 'хаалттай'
@@ -240,7 +247,7 @@ const Devices = () => {
     { field: 'serial_number', headerName: 'Дугаар', headerAlign: 'start', flex:2,},
     { field: 'device_type', headerName: 'Төрөл', headerAlign: 'start', flex:1,
       renderCell: (params) => (
-        <span style={{ backgroundColor: params.value === 'Халуун' ? 'red' : 'blue', borderRadius:'0.3rem', padding: '0.3rem', color: 'rgba(255, 255, 255, 0.967)' }}>{params.value}</span>
+        <span style={{ backgroundColor: params.value === 'Халуун' ? '#ca1a1a' : '#1b1bc6', borderRadius:'0.3rem', padding: '0.3rem', color: 'rgba(255, 255, 255, 0.967)' }}>{params.value}</span>
       ),
     },
     { field: 'status', headerName: 'Төлөв', headerAlign: 'start', flex:1,
@@ -396,7 +403,9 @@ const Devices = () => {
                         variant="outlined"
                         style={{ marginRight: '10px' }}
                         value={userId}
-                        onChange={(e) => setUserId(e.target.value)}
+                        onChange={handleUserIdChange}
+                        error={!!userIdError}
+                        helperText={userIdError}
                         sx={{
                           '& .MuiInputBase-input': {
                             color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
@@ -428,7 +437,9 @@ const Devices = () => {
                           readOnly: true,
                         }}               
                         sx={{
-                          color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',          
+                          '& .MuiInputBase-input': {
+                            color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },        
                           '& .MuiInputLabel-root': {
                             color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
                           },
@@ -444,10 +455,10 @@ const Devices = () => {
                         }}     
                       />
                        <Box display="flex" gap="1rem">
-                        <Button onClick={handleMapVisible} >
-                          <p className='p-3 bg-blue-700 rounded-md hover:bg-blue-800 ml-2 text-neutral-100'>ГАЗРЫН ЗУРАГ</p>
-                        </Button>
-                        <Button onClick={()=> {
+                        <button onClick={handleMapVisible}>
+                          <p className='p-3 rounded-md text-gray-500 dark:text-neutral-300 hover:text-neutral-100 hover:bg-blue-700 ml-1'>ГАЗРЫН ЗУРАГ</p>
+                        </button>
+                        <button onClick={()=> {
                           const dataToSend = {
                             device_id: selectedDevice.device_id,
                             device_user_id: userId, 
@@ -480,7 +491,7 @@ const Devices = () => {
                           handleClose();
                         }}>
                           <p className='p-3 bg-blue-700 rounded-md hover:bg-blue-800 text-neutral-100'>НЭМЭХ</p>
-                        </Button>
+                        </button>
                       </Box>
                       </Box>
                     </Grid>
@@ -502,12 +513,18 @@ const Devices = () => {
                 <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <div>
+                    <div className='dark:text-white'>
                       Газрын зураг
                     </div>
 
                     <Box display="flex" justifyContent="end">
-                      <Button style={{color: 'red'}} onClick={() => {
+                      <Button sx={{
+                        '&:hover': {
+                          backgroundColor: '#2196f3', 
+                          color: '#ffffff',
+                        },
+                        color:'red'
+                      }} onClick={() => {
                         const dataToSend = {
                           device_id: selectedDevice.device_id,
                         };
@@ -534,12 +551,17 @@ const Devices = () => {
 
                         handleClose();
                       }}>
-                        <MdDelete className='rounded-xl hover:bg-gray-300 text-xl' />
+                        <MdDelete className='rounded-xl text-xl' />
                       </Button>
                       <Button onClick={() => {
                         handleEdit(selectedDevice)
+                      }}  sx={{
+                        '&:hover': {
+                          backgroundColor: '#2196f3', 
+                          color: '#ffffff',
+                        },
                       }}>
-                        <MdEdit className='rounded-xl hover:bg-gray-300 text-xl' />
+                        <MdEdit className='rounded-xl text-xl' />
                       </Button>
                     </Box>
                   </Box>
@@ -562,8 +584,14 @@ const Devices = () => {
                 <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Box display="flex" justifyContent="space-between">
-                    <div>Газрын зураг</div>
-                    <Button style={{color:'red'}} onClick={() => {
+                    <div className='dark:text-white text-black'>Газрын зураг</div>
+                    <Button sx={{
+                        '&:hover': {
+                          backgroundColor: '#2196f3', 
+                          color: '#ffffff',
+                        },
+                        color: 'red'
+                      }} onClick={() => {
                       const dataToSend = {
                         device_id: selectedDevice.device_id,
                       };
@@ -591,7 +619,7 @@ const Devices = () => {
                   
                       handleClose();
                     }}>
-                      <MdDelete className='rounded-xl hover:bg-gray-300 text-xl' />
+                      <MdDelete className='rounded-xl text-xl' />
                     </Button>
                   </Box>
                 </Grid>
@@ -604,6 +632,25 @@ const Devices = () => {
                         style={{ flex: 1, marginRight: '10px', maxWidth: '200px' }}
                         value={userId}
                         onChange={(e) => setUserId(e.target.value)}
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },
+                          '& .MuiInputLabel-root': {
+                            color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                            },
+                            '&:hover fieldset': {
+                              borderColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                            },
+                          },
+                        }}
                       />
                       <TextField
                         margin="dense"
@@ -614,9 +661,26 @@ const Devices = () => {
                         InputProps={{
                           readOnly: true,
                         }}
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },        
+                          '& .MuiInputLabel-root': {
+                            color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },
+                          '& .MuiInput-underline:before': {
+                            borderBottomColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },
+                          '&:hover:not(.Mui-disabled):before': {
+                            borderBottomColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', 
+                          },
+                          '&.Mui-focused:after': {
+                            borderBottomColor: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
+                          },
+                        }}   
                       />
-                        <Button onClick={handleMapVisible} style={{marginLeft: '10px'}}>БАЙРШИЛ ӨӨРЧЛӨХ</Button>
-                      <Button onClick={()=> {
+                        <button onClick={handleMapVisible} ><p className='p-3 ml-2 text-gray-500 text-base dark:text-neutral-300 hover:bg-blue-700 rounded-md hover:text-white'>БАЙРШИЛ ӨӨРЧЛӨХ</p></button>
+                      <button onClick={()=> {
                          const dataToSend = {
                           device_id: selectedDevice.device_id,
                           device_user_id: userId,
@@ -640,7 +704,7 @@ const Devices = () => {
                           });
                     
                         handleClose();
-                      }}>ХАДГАЛАХ</Button>
+                      }}><p className='text-neutral-100 p-3 dark:text-neutral-300 hover:bg-blue-800 bg-blue-700 rounded-md text-base'>ХАДГАЛАХ</p></button>
                     </Box>
                   </Grid>
     
@@ -663,45 +727,59 @@ const Devices = () => {
                 <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <div>Төхөөрөмжийн мэдээлэл</div>
+                    <div className='dark:text-white text-black'>Төхөөрөмжийн мэдээлэл</div>
                     <Box display="flex" justifyContent="end">
                       <Button
                         className='mr-4'
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: '#2196f3', 
+                            color: '#ffffff',
+                          },
+                          color:'rgb(59 130 246)'
+                        }}
                         onClick={() => handle3times('open')}
                         disabled={!selectedDevice.device_user_id}
                       >
-                        <MdWaterDrop className='rounded-xl text-blue-500 hover:text-blue-800 text-2xl' />
+                        <MdWaterDrop className='rounded-xl text-2xl' />
                       </Button>
                       <Button
                         className=''
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: '#2196f3', 
+                            color: '#ffffff',
+                          },
+                          color:'rgb(59 130 246)'
+                        }}
                         disabled={!selectedDevice.device_user_id}
                         onClick={() => handle3times('close')}
                       >
-                        <MdOutlineInvertColorsOff className='rounded-xl text-blue-500 hover:text-blue-800 text-2xl' />
+                        <MdOutlineInvertColorsOff className='rounded-xl text-2xl' />
                       </Button>
                     </Box>
                   </Box>
                   <Box>
                     <TableContainer>
                       <Table sx={{minWidth:500}} aria-label='simple table'>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Төхөөрөмжийн ID</TableCell>
-                            <TableCell>Төхөөрөмжийн дугаар</TableCell>
-                            <TableCell>Төрөл</TableCell>
-                            <TableCell>Заалт</TableCell>
-                            <TableCell>Он сар</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          <TableRow>
-                                <TableCell>{selectedDevice.device_id}</TableCell>
-                                <TableCell>{selectedDevice.serial_number}</TableCell>
-                                <TableCell>{selectedDevice.device_type}</TableCell>
-                                <TableCell>{selectedDevice.cumulative_flow}</TableCell>
-                                <TableCell>{selectedDevice.received_datetime}</TableCell>
-                          </TableRow>
-                        </TableBody>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Төхөөрөмжийн ID</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Төхөөрөмжийн дугаар</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Төрөл</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Заалт</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Он сар</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{selectedDevice.device_id}</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{selectedDevice.serial_number}</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{selectedDevice.device_type}</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{selectedDevice.cumulative_flow}</TableCell>
+                          <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{selectedDevice.received_datetime}</TableCell>
+                        </TableRow>
+                      </TableBody>
                       </Table>
                     </TableContainer>
                   </Box>
@@ -713,7 +791,14 @@ const Devices = () => {
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
                         InputLabelProps={{ shrink: true }}
-                        sx={{ mr: 2 }}
+                        InputProps={{
+                          sx: {
+                            '& .MuiInputBase-input': {
+                              color:  darkMode ? 'rgba(255, 255, 255, 0.767)' : 'rgba(0, 0, 0, 0.767)', 
+                            },
+                          },
+                        }}
+                        sx={{ mr: 2 }} 
                       />
                       <TextField
                         label="End Date"
@@ -721,28 +806,40 @@ const Devices = () => {
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
                         InputLabelProps={{ shrink: true }}
+                        InputProps={{
+                          sx: {
+                            '& .MuiInputBase-input': {
+                              color: darkMode ? 'rgba(255, 255, 255, 0.767)' : 'rgba(0, 0, 0, 0.767)', 
+                            },
+                            '& .MuiOutlinedInput': {
+                              color:  darkMode ? 'rgba(255, 255, 255, 0.767)' : 'rgba(0, 0, 0, 0.767)', 
+                            },
+                          },
+                          
+                          
+                        }}
                       />
-                      <button className='ml-10' onClick={handleReset}>АРИЛГАХ</button>
+                      <button className='ml-10 dark:text-neutral-200 text-white bg-blue-700 p-2 rounded-md hover:bg-blue-800' onClick={handleReset}>АРИЛГАХ</button>
                     </Box>
                   </Box>
                   <Box className='mt-2'>
                   <TableContainer className='flex justify-center items-center'>
-                      <Table sx={{maxWidth:650}} size='small' aria-label='simple table'>
+                      <Table sx={{maxWidth:850}} size='small' aria-label='simple table'>
                         <TableHead>
                           <TableRow>
-                            <TableCell>Он сар</TableCell>
-                            <TableCell>Заалт</TableCell>
-                            <TableCell>Төлөв</TableCell>
-                            <TableCell>Мэдээлэл</TableCell>
+                            <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Он сар</TableCell>
+                            <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Заалт</TableCell>
+                            <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Төлөв</TableCell>
+                            <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>Мэдээлэл</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
                           {filteredViewData.map((dev) => (
                               <TableRow key={dev.device_id} sx={{'&:last-child td, &:last-child th': { border: 0 }}}>
-                                  <TableCell>{dev.received_datetime}</TableCell>
-                                  <TableCell>{dev.cumulative_flow}</TableCell>
-                                  <TableCell>{getStatusText(dev.status)}</TableCell>
-                                  <TableCell>Баттерэй: {dev.battery_status}V</TableCell>
+                                  <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{dev.received_datetime}</TableCell>
+                                  <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{dev.cumulative_flow}</TableCell>
+                                  <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{getStatusText(dev.status)}</TableCell>
+                                  <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{dev.battery_status ? `Баттерэй: ${dev.battery_status}V` : 'Баттерэй:'}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -755,7 +852,13 @@ const Devices = () => {
             </div>
           </DialogContent>
           <DialogActions className='dark:bg-table-bg bg-white'>
-            <Button onClick={handleClose} style={{color: darkMode ? 'white' : 'black' }}>Хаах</Button>
+            <Button onClick={handleClose} sx={{
+                        '&:hover': {
+                          backgroundColor: '#2196f3', 
+                          color: '#ffffff',
+                        },
+                        color: darkMode ? 'white' : 'black',
+                      }}>Хаах</Button>
           </DialogActions>
         </Dialog>
       </div>
