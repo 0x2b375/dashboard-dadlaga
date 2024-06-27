@@ -67,71 +67,69 @@ const Home = () => {
 
 
   return (
-    <div className={`mt-12 ${darkMode && 'dark'}`}>
+    <div className={`${darkMode && 'dark'}`}>
       <div className="flex flex-wrap justify-center flex-col m-8 ">
         <div className="flex dark:bg-table-bg bg-white w-full rounded-md shadow-xl ">
               <LineChart
-              
-              xAxis={[
-                {
-                  id: 'Years',
-                  data: years,
-                  scaleType: 'time',
-                  valueFormatter: (date) => date.getFullYear().toString(),
-                  axisLabelStyle: { fill: darkMode ? 'white' : 'black' },
-                  tickLabelStyle: { fill: darkMode ? 'white' : 'black' },
-                },
-              ]}
-              yAxis={[
-                {
-                  axisLabelStyle: { fill: darkMode ? 'white' : 'black' }, 
-                  tickLabelStyle: { fill: darkMode ? 'white' : 'black' }, 
-                }
-              ]}
-              series={[
-                {
-                  id: 'France',
-                  label: 'Хүйтэн',
-                  data: FranceGDPperCapita,
-                  stack: 'total',
-                  area: true,
-                  showMark: false,
-                },
-                {
-                  id: 'Germany',
-                  label: 'Халуун',
-                  data: GermanyGDPperCapita,
-                  stack: 'total',
-                  area: true,
-                  showMark: false,
-                },
-                {
-                  id: 'United Kingdom',
-                  label: 'Нийт',
-                  data: UKGDPperCapita,
-                  stack: 'total',
-                  area: true,
-                  showMark: false,
-                },
-              ]}
-              width={1200}
-              height={600}
-              margin={{ left: 70 }}
-              slotProps={{
-                legend: {
-                  labelStyle: { fill: darkMode ? 'white' : 'black' }
-                },
-                "& .MuiChartsAxis-root":{
-                  stroke: 'white'
-                },
-
+                xAxis={[
+                  {
+                    id: 'Years',
+                    data: years,
+                    scaleType: 'time',
+                    valueFormatter: (date) => date.getFullYear().toString(),
+                    axisLabelStyle: { fill: darkMode ? 'white' : 'black' },
+                    tickLabelStyle: { fill: darkMode ? 'white' : 'black' },
+                  },
+                ]}
+                yAxis={[
+                  {
+                    axisLabelStyle: { fill: darkMode ? 'white' : 'black' }, 
+                    tickLabelStyle: { fill: darkMode ? 'white' : 'black' }, 
+                  }
+                ]}
+                series={[
+                  {
+                    id: 'France',
+                    label: 'Хүйтэн',
+                    data: FranceGDPperCapita,
+                    stack: 'total',
+                    area: true,
+                    showMark: false,
+                  },
+                  {
+                    id: 'Germany',
+                    label: 'Халуун',
+                    data: GermanyGDPperCapita,
+                    stack: 'total',
+                    area: true,
+                    showMark: false,
+                  },
+                  {
+                    id: 'United Kingdom',
+                    label: 'Нийт',
+                    data: UKGDPperCapita,
+                    stack: 'total',
+                    area: true,
+                    showMark: false,
+                  },
+                ]}
+                width={1200}
+                height={600}
+                margin={{ left: 70 }}
+                slotProps={{
+                  legend: {
+                    labelStyle: { fill: darkMode ? 'white' : 'black' }
+                  },
+                  "& .MuiChartsAxis-root":{
+                    stroke: 'white'
+                  },
               }}
             />
         </div>
       </div>
       <div className='overflow-auto m-8 rounded-md dark:bg-table-bg bg-white shadow-xl'>
         <div className='w-full '>
-          <Map className=''/>
+          <Map />
         </div>
       </div>
      
