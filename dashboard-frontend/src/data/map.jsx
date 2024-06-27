@@ -36,22 +36,27 @@ export default function Map() {
   }, []);
 
   return (
-    <MapContainer center={[47.91885,106.91760]} zoom={15} scrollWheelZoom={true} style={{ height: "100vh", width: "100%" }}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <MarkerClusterGroup>
-        {markers.map((marker, idx) => (
-          <Marker key={idx} position={[marker.lat, marker.lng]} icon={customIcon}>
-            <Popup>
-              Хэрэглэгч: {marker.user}
-              <br />
-              Өргөрөг: {marker.lat}, Уртраг: {marker.lng}
-            </Popup>
-          </Marker>
-        ))}
-      </MarkerClusterGroup>
-    </MapContainer>
+    <div className="max-md:m-5 max-md:mt-24 m-5 overflow-auto">
+      <div className="w-full">
+        <MapContainer center={[47.91885, 106.91760]} zoom={15} scrollWheelZoom={true}>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <MarkerClusterGroup>
+            {markers.map((marker, idx) => (
+              <Marker key={idx} position={[marker.lat, marker.lng]} icon={customIcon}>
+                <Popup>
+                  Хэрэглэгч: {marker.user}
+                  <br />
+                  Өргөрөг: {marker.lat}, Уртраг: {marker.lng}
+                </Popup>
+              </Marker>
+            ))}
+          </MarkerClusterGroup>
+        </MapContainer>
+      </div>
+    </div>
+    
   );
 }
