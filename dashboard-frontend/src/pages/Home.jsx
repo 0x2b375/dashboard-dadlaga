@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import { earningData } from '../data/dummy';
 import Map from '../data/map';
 import { ChartsLegend } from '@mui/x-charts';
+import { useStateContext } from '../contexts/ContextProvider';
 
 const years = [
   new Date(1990, 0, 1),
@@ -61,10 +62,13 @@ const GermanyGDPperCapita = [
 ];
 
 const Home = () => {
+  const {darkMode} = useStateContext()
+
+
   return (
-    <div className="mt-12">
+    <div className={`mt-12 ${darkMode && 'dark'}`}>
       <div className="flex flex-wrap justify-center flex-col m-8 ">
-        <div className="flex bg-table-bg w-full rounded-2xl shadow-xl ">
+        <div className="flex dark:bg-table-bg bg-white w-full rounded-2xl shadow-xl ">
               <LineChart
               
               xAxis={[
@@ -73,14 +77,14 @@ const Home = () => {
                   data: years,
                   scaleType: 'time',
                   valueFormatter: (date) => date.getFullYear().toString(),
-                  axisLabelStyle: { fill: 'white' },
-                  tickLabelStyle: { fill: 'white' },
+                  axisLabelStyle: { fill: darkMode ? 'white' : 'black' },
+                  tickLabelStyle: { fill: darkMode ? 'white' : 'black' },
                 },
               ]}
               yAxis={[
                 {
-                  axisLabelStyle: { fill: 'white' }, 
-                  tickLabelStyle: { fill: 'white' }, 
+                  axisLabelStyle: { fill: darkMode ? 'white' : 'black' }, 
+                  tickLabelStyle: { fill: darkMode ? 'white' : 'black' }, 
                 }
               ]}
               series={[
@@ -109,22 +113,19 @@ const Home = () => {
                   showMark: false,
                 },
               ]}
-              width={1000}
-              height={500}
+              width={1200}
+              height={600}
               margin={{ left: 70 }}
               slotProps={{
                 legend: {
-                  labelStyle: { fill: 'white' }
+                  labelStyle: { fill: darkMode ? 'white' : 'black' }
                 },
-                tooltip: {
-                  labelStyle: { fill: 'white' },
-                  contentStyle: { backgroundColor: 'rgba(0, 0, 0, 0.7)' } 
-                }
+               
               }}
             />
         </div>
       </div>
-      <div className='overflow-auto m-8 rounded-2xl bg-table-bg shadow-xl'>
+      <div className='overflow-auto m-8 rounded-2xl dark:bg-table-bg bg-white shadow-xl'>
         <div className='w-full '>
           <Map className=''/>
         </div>
