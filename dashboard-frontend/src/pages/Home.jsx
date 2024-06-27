@@ -69,7 +69,7 @@ const Home = () => {
   return (
     <div className={`mt-12 ${darkMode && 'dark'}`}>
       <div className="flex flex-wrap justify-center flex-col m-8 ">
-        <div className="flex dark:bg-table-bg bg-white w-full rounded-2xl shadow-xl ">
+        <div className="flex dark:bg-table-bg bg-white w-full rounded-md shadow-xl ">
               <LineChart
               
               xAxis={[
@@ -129,7 +129,7 @@ const Home = () => {
             />
         </div>
       </div>
-      <div className='overflow-auto m-8 rounded-2xl dark:bg-table-bg bg-white shadow-xl'>
+      <div className='overflow-auto m-8 rounded-md dark:bg-table-bg bg-white shadow-xl'>
         <div className='w-full '>
           <Map className=''/>
         </div>
