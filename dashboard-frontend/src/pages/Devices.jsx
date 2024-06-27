@@ -10,7 +10,7 @@ import { Header } from '../components';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
 import { TbMapPlus } from "react-icons/tb";
-import { Button, Grid, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Drawer, Collapse, IconButton  } from '@mui/material';
+import { Button, Grid, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Drawer, Collapse, IconButton, useTheme  } from '@mui/material';
 import { PiUserCirclePlusFill } from "react-icons/pi";
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
@@ -36,7 +36,7 @@ import { ConfirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
 import { confirmDialog } from 'primereact/confirmdialog'
 import "./device.css"
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 const Devices = () => {
   const [filteredViewData, setFilteredViewData] = useState([]);
   const [action, setAction] = useState('');
@@ -50,7 +50,7 @@ const Devices = () => {
   const [selectedDevice, setSelectedDevice] = useState('');
   const [position, setPosition] = useState([47.91885,106.91760]);
   const toast = useRef(null);
-  
+  const {darkMode} = useStateContext();
   // useEffect(() => {
   //   const today = new Date().toISOString().split('T')[0];
   //   const storedDate = localStorage.getItem('requestDate');
@@ -236,7 +236,7 @@ const Devices = () => {
     { field: 'serial_number', headerName: 'Дугаар', headerAlign: 'start', flex:2,},
     { field: 'device_type', headerName: 'Төрөл', headerAlign: 'start', flex:1,
       renderCell: (params) => (
-        <span style={{ backgroundColor: params.value === 'Халуун' ? 'red' : 'blue', borderRadius:'0.3rem', padding: '0.3rem' }}>{params.value}</span>
+        <span style={{ backgroundColor: params.value === 'Халуун' ? 'red' : 'blue', borderRadius:'0.3rem', padding: '0.3rem', color: 'rgba(255, 255, 255, 0.967)' }}>{params.value}</span>
       ),
     },
     { field: 'status', headerName: 'Төлөв', headerAlign: 'start', flex:1,
@@ -297,13 +297,13 @@ const Devices = () => {
   });
 
   return (
-    <div className='h-screen overflow-auto mt-32 md:mt-8 '>
-      <div className='m-2 p-2 sm:m-12 sm:p-12 md:m-8 md:p-8 flex justify-center flex-col items-center bg-table-bg rounded-2xl shadow-xl'>
+    <div className={`h-screen overflow-auto mt-32 md:mt-8 ${darkMode && 'dark'}`}>
+      <div className='m-2 p-2 sm:m-12 sm:p-12 md:m-8 md:p-8 flex justify-center flex-col items-center dark:bg-table-bg bg-white rounded-2xl shadow-xl'>
         <div className=''>
             <Toast ref={toast} className='mt-24 md:mt-12'/>
             <ConfirmDialog />    
         </div>
-        <ThemeProvider theme={theme}>
+        <createTheme>
           <Box sx={{ overflow: "auto" }}>
             <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
               <DataGrid
@@ -323,26 +323,37 @@ const Devices = () => {
                 slots={{toolbar: GridToolbar}}
                 sx={{
                   '& .MuiDataGrid-cell': {
-                    color: 'rgba(255, 255, 255, 0.767)',
-                    borderTopColor:'rgba(255, 255, 255, 0.10)',
+                    color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
+                    borderTopColor: darkMode ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.167)',
                   },
                   '& .MuiDataGrid-columnHeaders': {
-                    color:'rgba(255, 255, 255, 0.867)',
-                    
+                    color: darkMode ? 'rgba(255, 255, 255, 0.867)' : 'rgba(0, 0, 0, 0.9)',
                   },
                   '& .MuiDataGrid-columnHeader': {
-                    backgroundColor: '#21212d',
-                    
+                    backgroundColor: darkMode ? '#21212d' : 'white',
                   },
                   '& .MuiDataGrid-footerContainer': {
-                    borderTop: '1px solid rgba(255, 255, 255, 0.10)'
+                    borderTop: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)',
+                  },
+                  '& .MuiTablePagination-root': {
+                    color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
+                  },
+                  '& .MuiTablePagination-actions .MuiButtonBase-root': {
+                    color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
+                  },
+                  '& .MuiDataGrid-toolbarContainer': {
+                    color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
+                  },
+                  '& .MuiButtonBase-root': {
+                    color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
                   },
                   border: 'none',
                 }}
               />
             </Box>
           </Box>
-        </ThemeProvider>
+        </createTheme>
+        
         <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
           <DialogTitle>{action === 'add' ? 'Төхөөрөмжийн мэдээлэл' : ''}</DialogTitle>
           <DialogContent>
