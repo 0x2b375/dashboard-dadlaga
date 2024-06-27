@@ -52,8 +52,9 @@ const Devices = () => {
   const toast = useRef(null);
   const {darkMode} = useStateContext();
   const [userIdError, setUserIdError] = useState('');
-  const [locationError, setLocationError] = useState('')
-  const [location, setlocation] = useState('')
+  const [locationError, setLocationError] = useState('false')
+  const [formTouched, setFormTouched] = useState(false);
+
 
   const handleUserIdChange = (e) => {
     const value = e.target.value
@@ -66,16 +67,16 @@ const Devices = () => {
     }
   };
 
-  const handleLocationChange = () => {
-    
-    if (selectedDevice.device_user_geolocation_latitude === null) {
+  useEffect(() => {
+    const latitude = selectedDevice.device_user_geolocation_latitude;
+    const longitude = selectedDevice.device_user_geolocation_longitude;
+
+    if (formTouched && latitude === null) {
       setLocationError(true);
     } else {
       setLocationError(false);
     }
-  };
-
-
+  }, [selectedDevice]);
 
   const getStatusText = (status) => {
     return status === 'open' ? 'нээлттэй' : 'хаалттай'
@@ -436,12 +437,11 @@ const Devices = () => {
                         required
                         label="Хаяг"
                         style={{ flex: 1 }}
-                        variant="outlined"
+                        variant="standard"
                         value={`${selectedDevice.device_user_geolocation_latitude || ''} ${selectedDevice.device_user_geolocation_longitude || ''}`}
                         InputProps={{
                           readOnly: true,
-                        }}
-                        onChange={handleLocationChange}               
+                        }}              
                         error={locationError}
                         helperText={locationError ? "Хэрэглэгчийн хаяг хоосон байж болохгүй" : ""}
                         sx={{
@@ -479,11 +479,15 @@ const Devices = () => {
                           if (userId === '') {
                             setUserIdError(true)
                             hasError = true;
-                            
+                          } else {
+                            setUserIdError(false)
                           }
+
                           if(selectedDevice.device_user_geolocation_latitude === null) {
                             setLocationError(true)  
                             hasError = true;
+                          } else {
+                            setLocationError(false)
                           }
 
                           if (hasError) {
