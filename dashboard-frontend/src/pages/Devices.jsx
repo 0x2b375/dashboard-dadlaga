@@ -29,7 +29,7 @@ import { IoIosGlobe } from "react-icons/io";
 import DialogContentText from '@mui/material/DialogContentText';
 import { BsEyeFill } from "react-icons/bs";
 import Map from '../data/map';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMapEvents, Popup } from 'react-leaflet';
 import { useStateContext } from '../contexts/ContextProvider';
 import CloseIcon from '@mui/icons-material/Close'
 import { ConfirmDialog } from 'primereact/confirmdialog'; 
@@ -218,7 +218,13 @@ const Devices = () => {
     });
 
     return selectedDevice ? (
-      <Marker position={position} />
+      <Marker position={position}>
+        <Popup>
+          Хэрэглэгчийн ID: {selectedDevice.device_user_id}
+          <br />
+          Өргөрөг: {selectedDevice.device_user_geolocation_latitude}, Уртраг: {selectedDevice.device_user_geolocation_longitude}
+       </Popup>
+      </Marker>
     ) : null;
   };
 
