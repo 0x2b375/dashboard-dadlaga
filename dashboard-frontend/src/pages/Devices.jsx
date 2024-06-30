@@ -37,6 +37,10 @@ import { Toast } from 'primereact/toast';
 import { confirmDialog } from 'primereact/confirmdialog'
 import "./device.css"
 import { createTheme } from '@mui/material/styles';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 const Devices = () => {
   const [filteredViewData, setFilteredViewData] = useState([]);
   const [action, setAction] = useState('');
@@ -826,40 +830,30 @@ const Devices = () => {
                   </Box>
                   <Box display="flex" justifyContent="space-between" alignItems="center" className="date-box" mt={2}>
                     <Box display="flex" alignItems="center">
-                      <TextField
-                        label="Start Date"
-                        type="date"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                        InputLabelProps={{ shrink: true }}
-                        InputProps={{
-                          sx: {
-                            '& .MuiInputBase-input': {
-                              color:  darkMode ? 'rgba(255, 255, 255, 0.767)' : 'rgba(0, 0, 0, 0.767)', 
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Start Date"
+                          value={startDate}
+                          onChange={(newValue) => setStartDate(newValue)}
+                          slotProps={{
+                            textField: {
+                              variant: 'outlined',
+                              InputLabelProps: { shrink: true },
                             },
-                          },
-                        }}
-                        sx={{ mr: 2 }} 
-                      />
-                      <TextField
-                        label="End Date"
-                        type="date"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                        InputLabelProps={{ shrink: true }}
-                        InputProps={{
-                          sx: {
-                            '& .MuiInputBase-input': {
-                              color: darkMode ? 'rgba(255, 255, 255, 0.767)' : 'rgba(0, 0, 0, 0.767)', 
+                          }}
+                        />
+                        <DatePicker
+                          label="End Date"
+                          value={endDate}
+                          onChange={(newValue) => setEndDate(newValue)}
+                          slotProps={{
+                            textField: {
+                              variant: 'outlined',
+                              InputLabelProps: { shrink: true },
                             },
-                            '& .MuiOutlinedInput': {
-                              color:  darkMode ? 'rgba(255, 255, 255, 0.767)' : 'rgba(0, 0, 0, 0.767)', 
-                            },
-                          },
-                          
-                          
-                        }}
-                      />
+                          }}
+                        />
+                      </LocalizationProvider>
                       <button className='ml-10 dark:text-neutral-200 text-white bg-blue-700 p-2 rounded-md hover:bg-blue-800' onClick={handleReset}>АРИЛГАХ</button>
                     </Box>
                   </Box>
