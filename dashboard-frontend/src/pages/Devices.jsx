@@ -765,7 +765,10 @@ const Devices = () => {
                             backgroundColor: '#2196f3', 
                             color: '#ffffff',
                           },
-                          color:'rgb(59 130 246)'
+                          color:'rgb(59 130 246)',
+                          '&.Mui-disabled': {
+                          color: darkMode ? 'rgba(255, 255, 255, 0.425)' : '', 
+                          },
                         }}
                         onClick={() => handle3times('open')}
                         disabled={!selectedDevice.device_user_id}
@@ -779,7 +782,10 @@ const Devices = () => {
                             backgroundColor: '#2196f3', 
                             color: '#ffffff',
                           },
-                          color:'rgb(59 130 246)'
+                          color:'rgb(59 130 246)',
+                          '&.Mui-disabled': {
+                            color: darkMode ? 'rgba(255, 255, 255, 0.425)' : '', 
+                          },
                         }}
                         disabled={!selectedDevice.device_user_id}
                         onClick={() => handle3times('close')}
