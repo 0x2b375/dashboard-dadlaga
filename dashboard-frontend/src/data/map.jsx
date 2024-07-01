@@ -40,7 +40,6 @@ export default function Map({real}) {
       <div className="w-full">
         <MapContainer center={[47.91885, 106.91760]} zoom={15} scrollWheelZoom={true}>
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <MarkerClusterGroup>
