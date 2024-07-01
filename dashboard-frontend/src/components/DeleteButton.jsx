@@ -66,15 +66,15 @@ const DeleteButton = ({ selectedDevice, setData, handleClose, accept, reject }) 
         <DialogTitle id="alert-dialog-title">{"Устгах уу?"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Та энэ хэрэглэгчийн мэдээллийг устгахдаа итгэлтэй байна уу?
+            {`Та энэ ${selectedDevice.device_user_id} төхөөрөмжийн хэрэглэгчийн мэдээллийг устгахдаа итгэлтэй байна уу?`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            Цуцлах
-          </Button>
           <Button onClick={handleDelete} color="primary" autoFocus>
             Устгах
+          </Button>
+          <Button onClick={handleCloseDialog} color="primary">
+            Цуцлах
           </Button>
         </DialogActions>
       </Dialog>
