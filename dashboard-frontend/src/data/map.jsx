@@ -36,7 +36,7 @@ export default function Map() {
   }, []);
 
   return (
-    <div className="max-md:m-5 max-md:mt-24 m-5 overflow-auto">
+    <div className="max-md:m-5 m-5 overflow-auto">
       <div className="w-full">
         <MapContainer center={[47.91885, 106.91760]} zoom={15} scrollWheelZoom={true}>
           <TileLayer

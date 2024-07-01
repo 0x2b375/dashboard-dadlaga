@@ -68,7 +68,7 @@ const Home = () => {
 
   return (
     <div className={`${darkMode && 'dark'}`}>
-      <div className="flex flex-wrap justify-center flex-col m-8 overflow-auto">
+      <div className="flex flex-wrap justify-center flex-col mx-8 overflow-auto max-md:mt-24 ">
         <div className="flex dark:bg-table-bg bg-white w-full rounded-md shadow-xl ">
               <LineChart
                 xAxis={[
@@ -113,7 +113,6 @@ const Home = () => {
                     showMark: false,
                   },
                 ]}
-                width={1000}
                 height={600}
                 margin={{ left: 70 }}
                 slotProps={{
@@ -127,9 +126,9 @@ const Home = () => {
             />
         </div>
       </div>
-      <div className='overflow-auto m-8 rounded-md dark:bg-table-bg bg-white shadow-xl'>
-        <div className='w-full '>
-          <Map />
+      <div className='rounded-md dark:bg-table-bg bg-white shadow-xl mx-8'>
+        <div className='w-full py-1 my-4'>
+          <Map/>
         </div>
       </div>
      
