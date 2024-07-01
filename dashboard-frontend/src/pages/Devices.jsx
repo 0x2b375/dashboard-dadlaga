@@ -43,6 +43,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import DeleteButton from '../components/DeleteButton';
 import MapComponent from '../components/MapComponent';
+import { FiCreditCard, FiMail, FiUser, FiUsers } from "react-icons/fi";
+import Card from '../components/Card';
+import { IoMdCheckmark } from "react-icons/io";
+import { MdClear } from "react-icons/md";
+
+
 
 const Devices = () => {
   const [filteredViewData, setFilteredViewData] = useState([]);
@@ -85,8 +91,8 @@ const Devices = () => {
     }
   }, [selectedDevice]);
 
-  const getStatusText = (status) => {
-    return status === 'open' ? 'нээлттэй' : 'хаалттай'
+  const getStatus = (status) => {
+    return status === 'open' ? <IoMdCheckmark /> : <MdClear />;
   }
 
   const handleClickOpen = (device) => {
@@ -243,7 +249,7 @@ const Devices = () => {
     },
     { field: 'status', headerName: 'Төлөв', headerAlign: 'start', flex:1,
       renderCell: (params) => (
-        <span>{getStatusText(params.value)}</span>
+        <span className='text-xl items-center flex flex-col'>{getStatus(params.value)}</span>
       ),
     },
     { field: 'cumulative_flow', headerName: 'Заалт', headerAlign: 'start', flex:1, },
@@ -299,8 +305,27 @@ const Devices = () => {
   });
 
   return (
-    <div className={`h-screen overflow-auto ${darkMode && 'dark'}`}>
-      <div className='m-2 sm:m-12 md:m-8 p-2 flex justify-center flex-col items-center dark:bg-table-bg bg-white rounded-2xl shadow-xl'>
+    <div className={`${darkMode && 'dark'}`}>
+      <div className="p-4 mx-4 max-md:mt-16 max-md:mx-8">
+        <p className="text-xl font-semibold mb-2">Settings</p>
+        <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+          <Card
+            title="Account"
+            subtitle="Manage profile"
+            href="#"
+            Icon={FiUser}
+          />
+          <Card title="Email" subtitle="Manage email" href="#" Icon={FiMail} />
+          <Card title="Team" subtitle="Manage team" href="#" Icon={FiUsers} />
+          <Card
+            title="Billing"
+            subtitle="Manage cards"
+            href="#"
+            Icon={FiCreditCard}
+          />
+        </div>
+      </div>
+      <div className='sm:m-12 md:m-8 p-2 flex justify-center flex-col items-center dark:bg-table-bg bg-white rounded-2xl shadow-xl'>
         <div className=''>
             <Toast ref={toast} className='mt-24 md:mt-12'/>
             <ConfirmDialog />    
@@ -329,6 +354,7 @@ const Devices = () => {
                   '& .MuiDataGrid-cell': {
                     color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
                     border: 'none',
+                    alignItems: 'center'
                   },
                   '& .MuiDataGrid-selectedRowCount': {
                     color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
@@ -837,7 +863,7 @@ const Devices = () => {
                               <TableRow key={dev.device_id} sx={{'&:last-child td, &:last-child th': { border: 0 }}}>
                                   <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{dev.received_datetime}</TableCell>
                                   <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{dev.cumulative_flow}</TableCell>
-                                  <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{getStatusText(dev.status)}</TableCell>
+                                  <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{getStatus(dev.status)}</TableCell>
                                   <TableCell sx={{ color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(0, 0, 0, 0.167)' }}>{dev.battery_status ? `Баттерэй: ${dev.battery_status}V` : 'Баттерэй:'}</TableCell>
                                 </TableRow>
                             ))}
