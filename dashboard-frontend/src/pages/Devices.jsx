@@ -40,6 +40,8 @@ import { createTheme } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import DeleteButton from '../components/DeleteButton';
 
 const Devices = () => {
   const [filteredViewData, setFilteredViewData] = useState([]);
@@ -557,41 +559,13 @@ const Devices = () => {
                     </div>
 
                     <Box display="flex" justifyContent="end">
-                      <Button sx={{
-                        '&:hover': {
-                          backgroundColor: '#2196f3', 
-                          color: '#ffffff',
-                        },
-                        color:'red'
-                      }} onClick={() => {
-                        const dataToSend = {
-                          device_id: selectedDevice.device_id,
-                        };
-
-                        axios.post('http://localhost:3001/api/user/delete', dataToSend, {
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                        })
-                          .then(response => {
-                            accept('Хэрэглэгчийн мэдээллийг амжилттай устгалаа.'); 
-                            setData(prevData => 
-                              prevData.map(device => 
-                                device.device_id === selectedDevice.device_id 
-                                  ? { ...device, device_user_id: null, device_user_geolocation_latitude: null, device_user_geolocation_longitude: null }
-                                  : device
-                              )
-                            );
-                          })
-                          .catch(error => {
-                            reject('Хүсэлт амжилтгүй боллоо.')
-                            console.error('Error', error);
-                          });
-
-                        handleClose();
-                      }}>
-                        <MdDelete className='rounded-xl text-xl' />
-                      </Button>
+                      <DeleteButton
+                        selectedDevice={selectedDevice} 
+                        setData={setData} 
+                        handleClose={handleClose}
+                        accept={accept}
+                        reject={reject}
+                      />
                       <Button onClick={() => {
                         handleEdit(selectedDevice)
                       }}  sx={{
@@ -831,28 +805,65 @@ const Devices = () => {
                   <Box display="flex" justifyContent="space-between" alignItems="center" className="date-box" mt={2}>
                     <Box display="flex" alignItems="center">
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          label="Start Date"
-                          value={startDate}
-                          onChange={(newValue) => setStartDate(newValue)}
-                          slotProps={{
-                            textField: {
-                              variant: 'outlined',
-                              InputLabelProps: { shrink: true },
+                      <DatePicker
+                        label="Start Date"
+                        value={startDate ? dayjs(startDate) : null}
+                        onChange={(newValue) => setStartDate(newValue ? newValue.toISOString() : '')}
+                        slotProps={{
+                          textField: {
+                            variant: 'outlined',
+                            InputLabelProps: { shrink: true },
+                            InputProps: {
+                              sx: {
+                                '& .MuiInputBase-input': {
+                                  color: darkMode ? 'rgba(255, 255, 255, 0.767)' : 'rgba(0, 0, 0, 0.767)',
+                                },
+                                '& .MuiSvgIcon-root': {
+                                  color: darkMode ? 'rgba(255, 255, 255, 0.867)' : 'rgba(0, 0, 0, 0.767)',
+                                },
+                              },
                             },
-                          }}
-                        />
-                        <DatePicker
-                          label="End Date"
-                          value={endDate}
-                          onChange={(newValue) => setEndDate(newValue)}
-                          slotProps={{
-                            textField: {
-                              variant: 'outlined',
-                              InputLabelProps: { shrink: true },
+                            sx: {
+                              '& .MuiInputLabel-root': {
+                                color: darkMode ? 'rgba(255, 255, 255, 0.767)' : 'rgba(0, 0, 0, 0.767)',
+                              },
+                              mr: 2,
+                              '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+                                  borderColor: darkMode ? 'rgba(255, 255, 255, 0.467)' : '',
+                                },
                             },
-                          }}
-                        />
+                          },
+                        }}
+                      />
+                      <DatePicker
+                        label="End Date"
+                        value={endDate ? dayjs(endDate) : null}
+                        onChange={(newValue) => setEndDate(newValue ? newValue.toISOString() : '')}
+                        slotProps={{
+                          textField: {
+                            variant: 'outlined',
+                            InputLabelProps: { shrink: true },
+                            InputProps: {
+                              sx: {
+                                '& .MuiInputBase-input': {
+                                  color: darkMode ? 'rgba(255, 255, 255, 0.767)' : 'rgba(0, 0, 0, 0.767)',
+                                },
+                                '& .MuiSvgIcon-root': {
+                                  color: darkMode ? 'rgba(255, 255, 255, 0.867)' : 'rgba(0, 0, 0, 0.767)',
+                                },
+                              },
+                            },
+                            sx: {
+                              '& .MuiInputLabel-root': {
+                                color: darkMode ? 'rgba(255, 255, 255, 0.767)' : 'rgba(0, 0, 0, 0.767)',
+                              },
+                              '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+                                  borderColor: darkMode ? 'rgba(255, 255, 255, 0.467)' : '',
+                                },
+                            },
+                          },
+                        }}
+                      />
                       </LocalizationProvider>
                       <button className='ml-10 dark:text-neutral-200 text-white bg-blue-700 p-2 rounded-md hover:bg-blue-800' onClick={handleReset}>АРИЛГАХ</button>
                     </Box>
