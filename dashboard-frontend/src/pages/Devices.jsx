@@ -224,13 +224,17 @@ const Devices = () => {
     });
 
     return selectedDevice ? (
-      <Marker position={position}>
-        <Popup>
-          Хэрэглэгчийн ID: {selectedDevice.device_user_id}
-          <br />
-          Өргөрөг: {selectedDevice.device_user_geolocation_latitude}, Уртраг: {selectedDevice.device_user_geolocation_longitude}
-       </Popup>
-      </Marker>
+        <Marker position={position}>
+        {action === 'map' && (
+          <Popup>
+            Хэрэглэгчийн ID: {selectedDevice.device_user_id}
+            <br />
+            Өргөрөг: {selectedDevice.device_user_geolocation_latitude}
+            <br />
+            Уртраг: {selectedDevice.device_user_geolocation_longitude}
+          </Popup>
+        )}
+    </Marker>
     ) : null;
   };
 
@@ -598,42 +602,13 @@ const Devices = () => {
                 <Grid item xs={12}>
                   <Box display="flex" justifyContent="space-between">
                     <div className='dark:text-white text-black'>Газрын зураг</div>
-                    <Button sx={{
-                        '&:hover': {
-                          backgroundColor: '#2196f3', 
-                          color: '#ffffff',
-                        },
-                        color: 'red'
-                      }} onClick={() => {
-                      const dataToSend = {
-                        device_id: selectedDevice.device_id,
-                      };
-
-                  
-                      axios.post('http://localhost:3001/api/user/delete', dataToSend, {
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                      })
-                        .then(response => {
-                          accept('Хэрэглэгчийн мэдээллийг амжилттай устгалаа.'); 
-                          setData(prevData => 
-                            prevData.map(device => 
-                              device.device_id === selectedDevice.device_id 
-                                ? { ...device, device_user_id: null, device_user_geolocation_latitude: null, device_user_geolocation_longitude: null }
-                                : device
-                            )
-                          );
-                        })
-                        .catch(error => {
-                          reject('Хүсэлт амжилтгүй боллоо.')
-                          console.error('Error', error);
-                        });
-                  
-                      handleClose();
-                    }}>
-                      <MdDelete className='rounded-xl text-xl' />
-                    </Button>
+                    <DeleteButton
+                        selectedDevice={selectedDevice} 
+                        setData={setData} 
+                        handleClose={handleClose}
+                        accept={accept}
+                        reject={reject}
+                      />
                   </Box>
                 </Grid>
                 <Grid item xs={12}>
