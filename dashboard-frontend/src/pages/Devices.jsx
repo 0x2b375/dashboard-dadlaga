@@ -42,6 +42,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import DeleteButton from '../components/DeleteButton';
+import MapComponent from '../components/MapComponent';
 
 const Devices = () => {
   const [filteredViewData, setFilteredViewData] = useState([]);
@@ -204,38 +205,6 @@ const Devices = () => {
     setPosition([latitude, longitude]);
     setOpen(true);
     setAction('map');
-  };
-
-  const handleMapClick = (e) => {
-    if (action !== 'map') {
-      const { lat, lng } = e.latlng;
-      setPosition([lat, lng]);
-      setSelectedDevice((prev) => ({
-        ...prev,
-        device_user_geolocation_latitude: lat,
-        device_user_geolocation_longitude: lng,
-      }));
-    }
-  };
-
-  const LocationMarker = () => {
-    useMapEvents({
-      click: handleMapClick,
-    });
-
-    return selectedDevice ? (
-        <Marker position={position}>
-        {action === 'map' && (
-          <Popup>
-            Хэрэглэгчийн ID: {selectedDevice.device_user_id}
-            <br />
-            Өргөрөг: {selectedDevice.device_user_geolocation_latitude}
-            <br />
-            Уртраг: {selectedDevice.device_user_geolocation_longitude}
-          </Popup>
-        )}
-    </Marker>
-    ) : null;
   };
 
   const handleEdit = (device) => {
@@ -542,14 +511,13 @@ const Devices = () => {
                     </Grid>
                   {mapVisible && (
                     <Grid item xs={20}>
-                      <Box mt={2} height="500px">
-                        <MapContainer center={position} zoom={13} style={{ height: "100%", width: "100%" }}>
-                          <TileLayer
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                          />
-                          <LocationMarker />
-                        </MapContainer>
-                      </Box>
+                      <MapComponent 
+                        position={position} 
+                        action={action} 
+                        selectedDevice={selectedDevice} 
+                        setPosition={setPosition} 
+                        setSelectedDevice={setSelectedDevice}  
+                      />
                     </Grid>
                   )}
                 </Grid>
@@ -586,12 +554,13 @@ const Devices = () => {
     
                 <Grid item xs={20}>
                   <Box mt={2} height="500px">
-                    <MapContainer center={position} zoom={20} style={{ height: "100%", width: "100%" }}>
-                      <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      />
-                      <LocationMarker />
-                    </MapContainer>
+                    <MapComponent 
+                          position={position} 
+                          action={action} 
+                          selectedDevice={selectedDevice} 
+                          setPosition={setPosition} 
+                          setSelectedDevice={setSelectedDevice}  
+                        />
                   </Box>
                 </Grid>
                 
@@ -699,12 +668,13 @@ const Devices = () => {
                   {mapVisible && (
                     <Grid item xs={20}>
                       <Box mt={2} height="500px">
-                        <MapContainer center={position} zoom={20} style={{ height: "100%", width: "100%" }}>
-                          <TileLayer
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                          />
-                          <LocationMarker />
-                        </MapContainer>
+                        <MapComponent 
+                          position={position} 
+                          action={action} 
+                          selectedDevice={selectedDevice} 
+                          setPosition={setPosition} 
+                          setSelectedDevice={setSelectedDevice}  
+                        />
                       </Box>
                     </Grid>
                   )}
