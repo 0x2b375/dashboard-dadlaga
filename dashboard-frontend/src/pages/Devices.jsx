@@ -243,6 +243,9 @@ const Devices = () => {
     { field: 'device_id', headerName: 'Төхөөрөмжийн ID', flex:2, headerAlign: 'start',},
     { field: 'serial_number', headerName: 'Дугаар', headerAlign: 'start', flex:2,},
     { field: 'device_type', headerName: 'Төрөл', headerAlign: 'start', flex:1,
+      renderCell: (params) => (
+        <span className={`text-sm flex justify-center rounded-md p-1 text-neutral-200 ${params.value === 'Халуун' ? 'bg-red-500' : 'bg-blue-400'}`}>{params.value}</span>
+      ),
       // renderCell: (params) => (
       //   <span style={{ backgroundColor: params.value === 'Халуун' ? '#ca1a1a' : '#1b1bc6', borderRadius:'0.3rem', padding: '0.3rem', color: 'rgba(255, 255, 255, 0.967)',}}>{params.value}</span>
       // ),
