@@ -300,7 +300,7 @@ const Devices = () => {
 
   return (
     <div className={`h-screen overflow-auto ${darkMode && 'dark'}`}>
-      <div className='m-2 p-2 sm:m-12 sm:p-12 md:m-8 md:p-8 flex justify-center flex-col items-center dark:bg-table-bg bg-white rounded-2xl shadow-xl'>
+      <div className='m-2 sm:m-12 md:m-8 p-2 flex justify-center flex-col items-center dark:bg-table-bg bg-white rounded-2xl shadow-xl'>
         <div className=''>
             <Toast ref={toast} className='mt-24 md:mt-12'/>
             <ConfirmDialog />    
@@ -324,13 +324,21 @@ const Devices = () => {
                 pageSizeOptions={[5, 10, 20, 50]} 
                 slots={{toolbar: GridToolbar}}
                 sx={{
+                  '--unstable_DataGrid-radius': '0px',
+                  '--DataGrid-rowBorderColor': darkMode ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.167)', 
                   '& .MuiDataGrid-cell': {
                     color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
-                    borderTopColor: darkMode ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.167)',
+                    border: 'none',
+                  },
+                  '& .MuiDataGrid-selectedRowCount': {
+                    color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
                   },
                   '& .MuiDataGrid-columnHeaders': {
                     color: darkMode ? 'rgba(255, 255, 255, 0.867)' : 'rgba(0, 0, 0, 0.9)',
                     fontSize: '1rem'
+                  },
+                  '& .MuiSelect-icon': {
+                    color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666'
                   },
                   '& .MuiDataGrid-columnHeader': {
                     backgroundColor: darkMode ? '#21212d' : 'white',
