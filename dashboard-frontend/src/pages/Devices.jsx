@@ -142,7 +142,7 @@ const Devices = () => {
   const confirm1 = (msg, acceptMsg, rejectMsg) => {
     confirmDialog({
       message: msg,
-      header: 'Батгалгаажуулалт',
+      header: 'Баталгаажуулалт',
       icon: 'pi pi-exclamation-triangle',
       defaultFocus: 'accept',
       accept: () => accept(acceptMsg),
