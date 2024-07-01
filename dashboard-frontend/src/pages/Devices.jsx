@@ -240,16 +240,16 @@ const Devices = () => {
   }, [startDate, endDate, viewData]);
   
   const columns = [
-    { field: 'device_id', headerName: 'Төхөөрөмжийн ID', flex:2, headerAlign: 'start', headerClassName: 'super-app-theme--header',},
+    { field: 'device_id', headerName: 'Төхөөрөмжийн ID', flex:2, headerAlign: 'start',},
     { field: 'serial_number', headerName: 'Дугаар', headerAlign: 'start', flex:2,},
     { field: 'device_type', headerName: 'Төрөл', headerAlign: 'start', flex:1,
-      renderCell: (params) => (
-        <span style={{ backgroundColor: params.value === 'Халуун' ? '#ca1a1a' : '#1b1bc6', borderRadius:'0.3rem', padding: '0.3rem', color: 'rgba(255, 255, 255, 0.967)' }}>{params.value}</span>
-      ),
+      // renderCell: (params) => (
+      //   <span style={{ backgroundColor: params.value === 'Халуун' ? '#ca1a1a' : '#1b1bc6', borderRadius:'0.3rem', padding: '0.3rem', color: 'rgba(255, 255, 255, 0.967)',}}>{params.value}</span>
+      // ),
     },
-    { field: 'status', headerName: 'Төлөв', headerAlign: 'start', flex:1,
+    { field: 'status', headerName: 'Төлөв', headerAlign: 'start', flex:1, 
       renderCell: (params) => (
-        <span className='text-xl items-center flex flex-col'>{getStatus(params.value)}</span>
+        <span className='text-xl flex justify-center'>{params.value === 'open' ? <IoMdCheckmark /> : <MdClear />}</span>
       ),
     },
     { field: 'cumulative_flow', headerName: 'Заалт', headerAlign: 'start', flex:1, },
@@ -325,7 +325,7 @@ const Devices = () => {
           />
         </div>
       </div>
-      <div className='sm:m-12 md:m-8 p-2 flex justify-center flex-col items-center dark:bg-table-bg bg-white rounded-2xl shadow-xl'>
+      <div className='max-sm:m-12 m-8 max-md:mx-12 p-2 flex justify-center flex-col items-center dark:bg-table-bg bg-white rounded-2xl shadow-xl'>
         <div className=''>
             <Toast ref={toast} className='mt-24 md:mt-12'/>
             <ConfirmDialog />    
@@ -354,7 +354,10 @@ const Devices = () => {
                   '& .MuiDataGrid-cell': {
                     color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
                     border: 'none',
-                    alignItems: 'center'
+                    textAlign: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'start', 
                   },
                   '& .MuiDataGrid-selectedRowCount': {
                     color: darkMode ? 'rgba(255, 255, 255, 0.767)' : '#465666',
