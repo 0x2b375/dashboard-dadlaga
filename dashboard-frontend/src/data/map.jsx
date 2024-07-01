@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { Icon } from "leaflet";
 import React, { useState, useEffect } from "react";
@@ -5,11 +6,10 @@ import axios from "axios";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import MarkerClusterGroup from 'react-leaflet-cluster';
 
-export default function Map() {
+export default function Map({real}) {
   const [markers, setMarkers] = useState([]);
   const [data, setData] = useState([]);
   const markerUrl = 'marker.png';
-
   const customIcon = new Icon({
     iconUrl: markerUrl,
     iconSize: [38, 38]
@@ -36,7 +36,7 @@ export default function Map() {
   }, []);
 
   return (
-    <div className="max-md:m-5 m-5 overflow-auto">
+    <div className={`max-md:m-5 m-5 overflow-auto ${!real && 'max-md:mt-24'}`}>
       <div className="w-full">
         <MapContainer center={[47.91885, 106.91760]} zoom={15} scrollWheelZoom={true}>
           <TileLayer

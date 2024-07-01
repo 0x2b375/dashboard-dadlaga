@@ -128,7 +128,7 @@ const Home = () => {
       </div>
       <div className='rounded-md dark:bg-table-bg bg-white shadow-xl mx-8'>
         <div className='w-full py-1 my-4'>
-          <Map/>
+          <Map real={true}/>
         </div>
       </div>
      
