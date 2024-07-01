@@ -47,7 +47,7 @@ export default function Map({real}) {
             {markers.map((marker, idx) => (
               <Marker key={idx} position={[marker.lat, marker.lng]} icon={customIcon}>
                 <Popup>
-                  Хэрэглэгч: {marker.user}
+                  Хэрэглэгчийн ID: {marker.user}
                   <br />
                   Өргөрөг: {marker.lat}, Уртраг: {marker.lng}
                 </Popup>
