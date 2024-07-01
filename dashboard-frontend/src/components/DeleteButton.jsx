@@ -13,8 +13,10 @@ const DeleteButton = ({ selectedDevice, setData, handleClose, accept, reject }) 
     setOpen(true);
   };
 
-  const handleCloseDialog = () => {
-    setOpen(false);
+  const handleCloseDialog = (event, reason) => {
+    if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+      setOpen(false);
+    }
   };
 
   const handleDelete = () => {
@@ -48,13 +50,16 @@ const DeleteButton = ({ selectedDevice, setData, handleClose, accept, reject }) 
 
   return (
     <>
-      <Button sx={{
-        '&:hover': {
-          backgroundColor: '#2196f3', 
-          color: '#ffffff',
-        },
-        color: 'red'
-      }} onClick={handleClickOpen}>
+      <Button
+        sx={{
+          '&:hover': {
+            backgroundColor: '#2196f3',
+            color: '#ffffff',
+          },
+          color: 'red'
+        }}
+        onClick={handleClickOpen}
+      >
         <MdDelete className='rounded-xl text-xl' />
       </Button>
       <Dialog
@@ -62,20 +67,35 @@ const DeleteButton = ({ selectedDevice, setData, handleClose, accept, reject }) 
         onClose={handleCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        disableEscapeKeyDown
+        maxWidth='xs'
+        sx={{
+          '& .MuiDialogTitle-root': {
+            fontWeight: '600'
+          },
+          '& .MuiDialogActions-root': {
+            justifyContent: 'center'
+          },
+          '& .MuiDialogContentText-root': {
+            paddingX: '1px'
+          },
+        }}
       >
-        <DialogTitle id="alert-dialog-title">{"Устгах уу?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title" className="text-2xl flex justify-center">
+          {"Устгах уу?"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {`Та энэ ${selectedDevice.device_user_id} төхөөрөмжийн хэрэглэгчийн мэдээллийг устгахдаа итгэлтэй байна уу?`}
+            {`${selectedDevice.device_id} төхөөрөмжийн хэрэглэгчийн мэдээллийг устгахдаа итгэлтэй байна уу?`}
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDelete} color="primary" autoFocus>
-            Устгах
-          </Button>
-          <Button onClick={handleCloseDialog} color="primary">
-            Цуцлах
-          </Button>
+        <DialogActions className='flex'>
+          <button onClick={handleDelete} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-20 rounded">
+            Тийм
+          </button>
+          <button onClick={handleCloseDialog} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-20 rounded">
+            Үгүй
+          </button>
         </DialogActions>
       </Dialog>
     </>
