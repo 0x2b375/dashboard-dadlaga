@@ -47,6 +47,8 @@ import { FiCreditCard, FiMail, FiUser, FiUsers } from "react-icons/fi";
 import Card from '../components/Card';
 import { IoMdCheckmark } from "react-icons/io";
 import { MdClear } from "react-icons/md";
+import { useSelector, useDispatch } from 'react-redux';
+import { addRequest, resetRequests } from '../../redux/requestSlice';
 
 
 
@@ -67,7 +69,8 @@ const Devices = () => {
   const [userIdError, setUserIdError] = useState('');
   const [locationError, setLocationError] = useState('false')
   const [formTouched, setFormTouched] = useState(false);
-
+  const dispatch = useDispatch();
+  const requestData = useSelector((state) => state.requests.requestData);
 
   const handleUserIdChange = (e) => {
     const value = e.target.value
@@ -106,6 +109,20 @@ const Devices = () => {
   };
 
   const handle3times = (statusValue) => {
+
+    const today = new Date().toISOString().split('T')[0];
+    dispatch(resetRequests());
+    // if (!requestData[today]) {
+    //   dispatch(resetRequests());
+    // }
+    const requestCount = requestData[today] ? requestData[today].count : 0;
+
+    if (requestCount >= 3) {
+      setOpen(false)
+      reject('Та өнөөдрийн хязгаартаа хүрсэн байна.')
+      return;
+    }
+
     const dataToSend = {
       device_id: selectedDevice.device_id,
       status_value: statusValue,
@@ -118,17 +135,15 @@ const Devices = () => {
     })
       .then(response => {
         if (response.status === 200) {
-          // const newRequestCount = requestCount + 1;
-          // localStorage.setItem('requestCount', newRequestCount.toString());
-
-          console.log(response.data.response_datetime)
+          console.log(response.data.response_datetime);
+          dispatch(addRequest(response.data.response_datetime));
 
           if (statusValue === 'open') {
             confirm1('Тоолуурын хаалт нээх хүсэлт илгээхдээ итгэлтэй байна уу?', 'Тоолуурын хаалт нээх хүсэлт амжилттай илгээгдлээ.', 'Хүсэлт амжилтгүй боллоо.');
           } else {
             confirm1('Тоолуурын хаалт хаах хүсэлт илгээхдээ итгэлтэй байна уу?', 'Тоолуурын хаалт хаах хүсэлт амжилттай илгээгдлээ.', 'Хүсэлт амжилтгүй боллоо.');
           }
-          
+
           setData(prevData => prevData.map(device => device.device_id === selectedDevice.device_id ? { ...device, ...dataToSend } : device));
         }
       })
@@ -137,7 +152,7 @@ const Devices = () => {
         console.error('Error', error);
       });
   };
-  
+
   const accept = (msg) => {
     toast.current.show({ severity: 'success', summary: 'Баталгаажлаа', detail: msg, life: 3000 });
   }
@@ -244,11 +259,8 @@ const Devices = () => {
     { field: 'serial_number', headerName: 'Дугаар', headerAlign: 'start', flex:2,},
     { field: 'device_type', headerName: 'Төрөл', headerAlign: 'start', flex:1,
       renderCell: (params) => (
-        <span className={`text-sm flex justify-center rounded-md p-1 text-neutral-200 ${params.value === 'Халуун' ? 'bg-red-500' : 'bg-blue-400'}`}>{params.value}</span>
+        <span className={`text-sm flex justify-center rounded-md p-1 text-neutral-100 ${params.value === 'Халуун' ? 'bg-red-500' : 'bg-blue-400'}`}>{params.value}</span>
       ),
-      // renderCell: (params) => (
-      //   <span style={{ backgroundColor: params.value === 'Халуун' ? '#ca1a1a' : '#1b1bc6', borderRadius:'0.3rem', padding: '0.3rem', color: 'rgba(255, 255, 255, 0.967)',}}>{params.value}</span>
-      // ),
     },
     { field: 'status', headerName: 'Төлөв', headerAlign: 'start', flex:1, 
       renderCell: (params) => (
